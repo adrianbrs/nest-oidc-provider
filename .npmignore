@@ -1,6 +1,6 @@
 # Source
 index.ts
-test
+tests
 lib
 tsconfig.json
 yarn.lock

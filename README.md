@@ -1,2 +1,2 @@
 # nest-oidc-provider
-oidc-provider module for Nest framework (node.js)
+[oidc-provider](https://github.com/panva/node-oidc-provider) module for [Nest](https://github.com/nestjs/nest) framework (node.js)

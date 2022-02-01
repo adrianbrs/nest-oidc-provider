@@ -2,7 +2,7 @@
   "name": "nest-oidc-provider",
   "version": "1.0.0",
   "description": "oidc-provider module for Nest framework (node.js)",
-  "author": "Adrian Cerbaro",
+  "author": "Adrian Cerbaro <adriancerbaro@gmail.com>",
   "license": "MIT",
   "private": false,
   "repository": {
@@ -23,7 +23,6 @@
     "test:e2e": "jest --config ./tests/jest-e2e.json --runInBand",
     "test:e2e:dev": "jest --config ./tests/jest-e2e.json --runInBand --watch"
   },
-  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-angular": "^16.0.0",
@@ -64,5 +63,9 @@
       "commit-msg": "commitlint -c .commitlintrc.json -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/adrianbrs/nest-oidc-provider/issues"
+  },
+  "homepage": "https://github.com/adrianbrs/nest-oidc-provider#readme"
 }

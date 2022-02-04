@@ -36,7 +36,7 @@ export class AppModule {}
 ```
 
 ### Async configuration
-#### `useClass`
+#### `useFactory`
 ```ts
 @Module({
   imports: [
@@ -54,7 +54,7 @@ export class AppModule {}
 export class AppModule {}
 ```
 
-#### `useFactory`
+#### `useClass`
 
 ```ts
 @Module({

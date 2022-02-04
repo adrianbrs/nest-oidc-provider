@@ -4,7 +4,9 @@ import { getReqRes } from '../common/oidc.utils';
 import { OidcService } from '../oidc.service';
 
 @Injectable()
-export class OidcContextPipe implements PipeTransform<ExecutionContext, KoaContextWithOIDC> {
+export class OidcContextPipe
+  implements PipeTransform<ExecutionContext, KoaContextWithOIDC>
+{
   constructor(private readonly oidcService: OidcService) {}
 
   transform(ctx: ExecutionContext) {

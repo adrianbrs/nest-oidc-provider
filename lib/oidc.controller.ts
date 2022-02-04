@@ -1,15 +1,15 @@
 import {
   All,
   Controller,
-  Inject,
   Req,
   Res,
   VersioningType,
+  VERSION_NEUTRAL,
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { Provider } from 'oidc-provider';
-import { OIDC_PATH } from './oidc.constants';
+import { PATH_METADATA, VERSION_METADATA } from '@nestjs/common/constants';
 
 @Controller()
 export class OidcController {
@@ -17,7 +17,6 @@ export class OidcController {
 
   constructor(
     readonly provider: Provider,
-    @Inject(OIDC_PATH) private readonly oidcPath: string,
     private readonly moduleRef: ModuleRef,
   ) {
     this.callback = provider.callback();
@@ -25,9 +24,9 @@ export class OidcController {
 
   private getUrl(originalUrl: string) {
     let resultUrl = originalUrl;
-    const appConfig = this.moduleRef['container']?.applicationConfig;
-    const globalPrefix = appConfig?.getGlobalPrefix();
-    const versioning = appConfig?.getVersioning();
+    const appConfig = this.moduleRef['container']!.applicationConfig;
+    const globalPrefix = appConfig!.getGlobalPrefix();
+    const versioning = appConfig!.getVersioning();
 
     // Remove global prefix
     if (globalPrefix) {
@@ -36,17 +35,21 @@ export class OidcController {
 
     // Remove version
     if (versioning?.type === VersioningType.URI) {
-      const prefix = versioning.prefix ?? 'v';
-      const versionRegex = new RegExp(`^\/*${prefix}[^\/]+`);
-      resultUrl = resultUrl.replace(versionRegex, '');
+      const version: string | symbol =
+        Reflect.getMetadata(VERSION_METADATA, OidcController) ??
+        versioning.defaultVersion;
+
+      if (version && version !== VERSION_NEUTRAL) {
+        resultUrl = resultUrl.replace(/^\/*[^\/]+/, '');
+      }
     }
 
     // Remove controller path
-    if (this.oidcPath && this.oidcPath !== '/') {
-      resultUrl = resultUrl.replace(this.oidcPath, '');
-    }
+    const controllerPath = Reflect.getMetadata(PATH_METADATA, OidcController);
+    resultUrl = resultUrl.replace(controllerPath, '');
 
-    return resultUrl.replace(/^\/+/, '/');
+    // Normalize
+    return `/${resultUrl}`.replace(/^\/+/, '/');
   }
 
   @All('/*')

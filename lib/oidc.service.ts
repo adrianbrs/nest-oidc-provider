@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IncomingMessage, ServerResponse } from 'http';
-import * as oidc from 'oidc-provider';
 import { Session } from './types/oidc.types';
+import * as oidc from 'oidc-provider';
 
 @Injectable()
 export class OidcService {
@@ -22,7 +22,7 @@ export class OidcService {
     req: IncomingMessage,
     res: ServerResponse,
   ): Promise<Session> {
-    const ctx = this.provider.app.createContext(req, res);
+    const ctx = this.getContext(req, res);
     const session = await this.provider.Session.get(ctx);
     return session;
   }

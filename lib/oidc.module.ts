@@ -11,10 +11,10 @@ import {
   OidcModuleOptions,
   OidcModuleOptionsFactory,
 } from './interfaces/oidc-module.interface';
-import { OIDC_MODULE_OPTIONS, OIDC_PATH } from './oidc.constants';
+import { OIDC_MODULE_OPTIONS } from './oidc.constants';
 import { OidcController } from './oidc.controller';
 import { OidcService } from './oidc.service';
-import { validatePaths } from './common/oidc.utils';
+import { validatePath } from './common/oidc.utils';
 import * as oidc from 'oidc-provider';
 
 @Global()
@@ -24,7 +24,6 @@ import * as oidc from 'oidc-provider';
 })
 export class OidcModule {
   static forRoot(options: OidcModuleOptions): DynamicModule {
-    const pathProvider = this.createPathProvider();
     const oidcProvider = this.createOidcProvider();
 
     return {
@@ -34,7 +33,6 @@ export class OidcModule {
           provide: OIDC_MODULE_OPTIONS,
           useValue: options,
         },
-        pathProvider,
         oidcProvider,
       ],
       exports: [oidcProvider],
@@ -44,13 +42,12 @@ export class OidcModule {
 
   static forRootAsync(options: OidcModuleAsyncOptions): DynamicModule {
     const asyncProviers = this.createAsyncProviders(options);
-    const pathProvider = this.createPathProvider();
     const oidcProvider = this.createOidcProvider();
 
     return {
       module: OidcModule,
       imports: options.imports,
-      providers: [...asyncProviers, pathProvider, oidcProvider],
+      providers: [...asyncProviers, oidcProvider],
       exports: [oidcProvider],
       controllers: [OidcController],
     };
@@ -59,14 +56,11 @@ export class OidcModule {
   private static createOidcProvider(): Provider {
     return {
       provide: oidc.Provider,
-      useFactory: async (
-        moduleOptions: OidcModuleOptions,
-        path: string,
-      ): Promise<any> => {
+      useFactory: async (moduleOptions: OidcModuleOptions): Promise<any> => {
         // Change controller path manually until Nest doesn't provide an official way for this
         // (see https://github.com/nestjs/nest/issues/1438)
         Controller({
-          path,
+          path: validatePath(moduleOptions.path),
           version: moduleOptions.version,
         })(OidcController);
 
@@ -76,15 +70,6 @@ export class OidcModule {
         );
         return provider;
       },
-      inject: [OIDC_MODULE_OPTIONS, OIDC_PATH],
-    };
-  }
-
-  private static createPathProvider(): Provider {
-    return {
-      provide: OIDC_PATH,
-      useFactory: (moduleOptions: OidcModuleOptions) =>
-        validatePaths(moduleOptions.path ?? '/'),
       inject: [OIDC_MODULE_OPTIONS],
     };
   }

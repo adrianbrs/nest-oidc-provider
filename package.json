@@ -1,6 +1,6 @@
 {
   "name": "nest-oidc-provider",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "oidc-provider module for Nest framework (node.js)",
   "author": "Adrian Cerbaro <adriancerbaro@gmail.com>",
   "license": "MIT",

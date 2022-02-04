@@ -18,7 +18,7 @@ async function bootstrap() {
   await app.listen(PORT);
 
   const logger = new Logger(`nest-oidc-provider-example`);
-  logger.log(`Listening on port ${PORT}`);
+  logger.log(`Listening on http://localhost:${PORT}`);
   logger.log(
     `Discovery endpoint: http://localhost:${PORT}/oidc/.well-known/openid-configuration`,
   );

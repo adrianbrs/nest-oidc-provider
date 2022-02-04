@@ -156,6 +156,9 @@ A complete example can be found in the [example](example) directory.
 ## Contributing
 You are welcome to contribute to this project, just open a PR.
 
+## CHANGELOG
+See [CHANGELOG](CHANGELOG.md) for more information.
+
 ## License
 
 This project is [MIT licensed](LICENSE).

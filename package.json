@@ -26,17 +26,18 @@
     "format": "prettier --write \"{lib,tests}/**/*.ts\"",
     "lint": "eslint 'lib/**/*.ts' --fix",
     "precommit": "lint-staged",
-    "prepublish:npm": "npm run build",
-    "publish:npm": "npm publish --access public",
-    "prepublish:next": "npm run build",
-    "publish:next": "npm publish --access public --tag next",
-    "prerelease": "npm run build",
+    "prepublish:npm": "yarn build",
+    "publish:npm": "yarn publish --access public",
+    "prepublish:next": "yarn build",
+    "publish:next": "yarn publish --access public --tag next",
+    "prerelease": "yarn build",
     "release": "release-it",
     "test": "yarn test:e2e && yarn test:cov",
     "test:cov": "jest --coverage",
     "test:dev": "jest --watch",
     "test:e2e": "jest -c ./test/jest-e2e.json --runInBand",
-    "test:e2e:dev": "jest -c ./test/jest-e2e.json --runInBand --watch"
+    "test:e2e:dev": "jest -c ./test/jest-e2e.json --runInBand --watch",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
@@ -120,5 +121,8 @@
         "tsconfig": "<rootDir>/tsconfig.json"
       }
     }
+  },
+  "dependencies": {
+    "conventional-changelog-cli": "^2.2.2"
   }
 }

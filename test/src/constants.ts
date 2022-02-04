@@ -1,14 +1,21 @@
 import { OidcModuleOptions } from '../../lib';
-import { NoopAdapter } from './adapters/noop.adapter';
+import { TestAdapter } from './adapters/test.adapter';
+import { DatabaseService } from './database/database.service';
+import merge from 'lodash.merge';
 
 export const OPTIONS_TOKEN = 'OidcTestOptions';
 export const ISSUER = 'http://localhost:3001';
+export const STATIC_DB_SERVICE = new DatabaseService();
 
-export const STATIC_OPTIONS: OidcModuleOptions = {
+export const getStaticAdapterFactory = () =>
+  function AdapterFactory(modelName: string) {
+    return new TestAdapter(modelName, STATIC_DB_SERVICE);
+  };
+
+export const BASE_OPTIONS: OidcModuleOptions = {
   issuer: ISSUER,
   path: '/oidc',
   oidc: {
-    adapter: NoopAdapter,
     clients: [
       {
         client_id: 'test',
@@ -22,9 +29,9 @@ export const STATIC_OPTIONS: OidcModuleOptions = {
       return {
         accountId: id,
         claims: () => ({
-          sub: id
-        })
-      }
+          sub: id,
+        }),
+      };
     },
     features: {
       devInteractions: {
@@ -34,18 +41,12 @@ export const STATIC_OPTIONS: OidcModuleOptions = {
     responseTypes: ['code'],
     pkce: {
       methods: ['S256'],
-      required: () => false
+      required: () => false,
     },
-    scopes: [
-      'openid',
-      'email',
-      'profile',
-      'address',
-      'phone',
-      'account',
-    ],
+    scopes: ['openid', 'email', 'profile', 'address', 'phone', 'account'],
     interactions: {
-      url: (_ctx, interaction) => `/${interaction.prompt.name}/${interaction.uid}`,
+      url: (_ctx, interaction) =>
+        `/${interaction.prompt.name}/${interaction.uid}`,
     },
     cookies: {
       keys: [
@@ -84,3 +85,9 @@ export const STATIC_OPTIONS: OidcModuleOptions = {
     },
   },
 };
+
+export const SYNC_OPTIONS: OidcModuleOptions = merge({}, BASE_OPTIONS, {
+  oidc: {
+    adapter: getStaticAdapterFactory(),
+  },
+} as Partial<OidcModuleOptions>);

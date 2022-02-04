@@ -1,27 +1,28 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppModule } from '../src/app.module';
+import { AppAsyncFactoryModule } from '../src/app-async-factory.module';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
-import { ISSUER } from '../src/constants';
+import { Provider } from 'oidc-provider';
+import { DatabaseService } from '../src/database/database.service';
 import request from 'supertest';
 
-describe('OidcModule - forRoot()', () => {
+describe('[E2E] OidcModule - async configuration (useFactory)', () => {
   let app: INestApplication;
   let server: Server;
   let address: AddressInfo;
   let baseURL: string;
-  let agent: request.SuperAgentTest
+  let agent: request.SuperAgentTest;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppAsyncFactoryModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
     server = app.getHttpServer();
     agent = request.agent(server);
-    
+
     await app.listen(0);
 
     address = server.address()! as AddressInfo;
@@ -34,16 +35,27 @@ describe('OidcModule - forRoot()', () => {
     agent
       .get('/oidc/.well-known/openid-configuration')
       .expect(HttpStatus.OK)
-      .end((err, { body }) => {
-        if (err) {
-          return done(err);
-        }
-        expect(body?.issuer).toEqual(ISSUER);
+      .end((_err, { body }) => {
+        expect(body?.issuer).toEqual('http://localhost:3001');
         expect(body?.authorization_endpoint).toEqual(authEndpoint);
-        expect(body?.grant_types_supported).toEqual(['authorization_code'])
-        expect(body?.response_types_supported).toEqual(['code'])
+        expect(body?.grant_types_supported).toEqual(['authorization_code']);
+        expect(body?.response_types_supported).toEqual(['code']);
         done();
       });
+  });
+
+  it('should save a grant through the adapter', async () => {
+    const provider = app.get(Provider);
+    const dbService = app.get(DatabaseService, { strict: false });
+
+    const grant = new provider.Grant({
+      accountId: 'test',
+      clientId: 'test',
+    });
+
+    const grantId = await grant.save();
+
+    expect(dbService.find('Grant', grantId)).toBeTruthy();
   });
 
   afterAll(async () => {

@@ -10,7 +10,7 @@ import { InteractionModule } from './interaction/interaction.module';
       imports: [DatabaseModule],
       useClass: OidcOptionsService,
     }),
-    InteractionModule
+    InteractionModule,
   ],
 })
 export class AppAsyncClassModule {}

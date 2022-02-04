@@ -5,12 +5,16 @@
   "author": "Adrian Cerbaro <adriancerbaro@gmail.com>",
   "license": "MIT",
   "private": false,
+  "homepage": "https://github.com/adrianbrs/nest-oidc-provider#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/adrianbrs/nest-oidc-provider"
   },
+  "bugs": {
+    "url": "https://github.com/adrianbrs/nest-oidc-provider/issues"
+  },
   "scripts": {
-    "build": "rimraf -rf dist && tsc -p tsconfig.json",
+    "build": "rimraf -rf dist && tsc -p tsconfig.build.json",
     "format": "prettier --write \"{lib,tests}/**/*.ts\"",
     "lint": "eslint 'lib/**/*.ts' --fix",
     "precommit": "lint-staged",
@@ -20,17 +24,22 @@
     "publish:next": "npm publish --access public --tag next",
     "prerelease": "npm run build",
     "release": "release-it",
-    "test:e2e": "jest --config ./tests/jest-e2e.json --runInBand",
-    "test:e2e:dev": "jest --config ./tests/jest-e2e.json --runInBand --watch"
+    "test": "yarn test:e2e && yarn test:cov",
+    "test:cov": "jest --coverage",
+    "test:dev": "jest --watch",
+    "test:e2e": "jest -c ./test/jest-e2e.json --runInBand",
+    "test:e2e:dev": "jest -c ./test/jest-e2e.json --runInBand --watch"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-angular": "^16.0.0",
+    "@golevelup/ts-jest": "^0.3.2",
     "@nestjs/common": "^8.2.6",
     "@nestjs/core": "^8.2.6",
     "@nestjs/platform-express": "^8.2.6",
     "@nestjs/testing": "^8.2.6",
     "@types/jest": "^27.4.0",
+    "@types/lodash.merge": "^4.6.6",
     "@types/node": "^17.0.14",
     "@types/oidc-provider": "^7.8.1",
     "@types/supertest": "^2.0.11",
@@ -42,7 +51,9 @@
     "express": "^4.17.2",
     "husky": "^7.0.4",
     "jest": "^27.4.7",
+    "jest-mock": "^27.4.6",
     "lint-staged": "^12.3.2",
+    "lodash.merge": "^4.6.2",
     "oidc-provider": "^7.10.6",
     "prettier": "^2.5.1",
     "reflect-metadata": "^0.1.13",
@@ -69,8 +80,34 @@
       "pre-commit": "lint-staged"
     }
   },
-  "bugs": {
-    "url": "https://github.com/adrianbrs/nest-oidc-provider/issues"
-  },
-  "homepage": "https://github.com/adrianbrs/nest-oidc-provider#readme"
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "testEnvironment": "node",
+    "verbose": true,
+    "testMatch": [
+      "<rootDir>/lib/**/*.spec.ts"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "coverageDirectory": "./coverage",
+    "collectCoverageFrom": [
+      "lib/**/*.ts",
+      "!lib/common/oidc.decorators.ts",
+      "!lib/**/index.ts",
+      "!lib/**/*.constants.ts",
+      "!lib/**/*.module.ts",
+      "!lib/**/*.interface.ts",
+      "!**/node_modules/**"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "<rootDir>/tsconfig.json"
+      }
+    }
+  }
 }

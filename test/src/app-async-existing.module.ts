@@ -10,7 +10,7 @@ import { OidcOptionsService } from './options/oidc-options.service';
       imports: [OidcOptionsModule],
       useExisting: OidcOptionsService,
     }),
-    InteractionModule
+    InteractionModule,
   ],
 })
 export class AppAsyncExistingModule {}

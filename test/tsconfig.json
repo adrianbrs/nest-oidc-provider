@@ -5,11 +5,11 @@
     "strictNullChecks": true
   },
   "include": [
-    "**/*.spec.ts",
     "**/*.e2e-spec.ts",
+    "**/*.spec.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
   ]
 }

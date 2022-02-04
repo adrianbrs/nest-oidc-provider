@@ -1,7 +1,7 @@
 import { Adapter, AdapterPayload } from 'oidc-provider';
 import { DatabaseService } from '../database/database.service';
 
-export class CustomAdapter implements Adapter {
+export class TestAdapter implements Adapter {
   constructor(public modelName: string, public dbService: DatabaseService) {}
 
   async upsert(

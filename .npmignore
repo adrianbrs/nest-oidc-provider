@@ -1,9 +1,10 @@
 # Source
 index.ts
-tests
+test
 lib
 example
 tsconfig.json
+tsconfig.build.json
 yarn.lock
 
 # Logs
@@ -50,6 +51,7 @@ node_modules/
 # github
 .github
 CONTRIBUTING.md
+CHANGELOG.md
 
 # NPM
 example

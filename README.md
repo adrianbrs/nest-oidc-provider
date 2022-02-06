@@ -1,6 +1,7 @@
 # nest-oidc-provider
 
 [![NPM Version](https://img.shields.io/npm/v/nest-oidc-provider.svg)](https://www.npmjs.com/package/nest-oidc-provider)
+[![npm](https://img.shields.io/npm/dw/nest-oidc-provider)](https://www.npmjs.com/package/nest-oidc-provider)
 [![NPM License](https://img.shields.io/npm/l/nest-oidc-provider)](https://github.com/adrianbrs/nest-oidc-provider/blob/main/LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/adrianbrs/nest-oidc-provider/badge.svg?branch=main)](https://coveralls.io/github/adrianbrs/nest-oidc-provider?branch=main)
 [![Continuous Integration](https://github.com/adrianbrs/nest-oidc-provider/actions/workflows/test.yml/badge.svg)](https://github.com/adrianbrs/nest-oidc-provider/actions/workflows/test.yml)

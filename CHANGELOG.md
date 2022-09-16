@@ -1,3 +1,11 @@
+## [1.0.6](https://github.com/adrianbrs/nest-oidc-provider/compare/1.0.5...1.0.6) (2022-02-04)
+
+
+
+## [1.0.5](https://github.com/adrianbrs/nest-oidc-provider/compare/1.0.4...1.0.5) (2022-02-04)
+
+
+
 ## [1.0.4](https://github.com/adrianbrs/nest-oidc-provider/compare/1.0.3...1.0.4) (2022-02-04)
 
 

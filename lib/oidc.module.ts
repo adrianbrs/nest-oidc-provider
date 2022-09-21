@@ -64,11 +64,11 @@ export class OidcModule {
           version: moduleOptions.version,
         })(OidcController);
 
-        const provider = new oidc.Provider(
-          moduleOptions.issuer,
-          moduleOptions.oidc,
-        );
-        return provider;
+        const providerFactory =
+          moduleOptions.factory ||
+          ((issuer, config) => new oidc.Provider(issuer, config));
+
+        return providerFactory(moduleOptions.issuer, moduleOptions.oidc);
       },
       inject: [OIDC_MODULE_OPTIONS],
     };

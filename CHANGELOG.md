@@ -1,3 +1,17 @@
+# [1.1.0](https://github.com/adrianbrs/nest-oidc-provider/compare/1.0.7...1.1.0) (2022-09-22)
+
+
+### Features
+
+* add `factory` property to module options ([c7c4a06](https://github.com/adrianbrs/nest-oidc-provider/commit/c7c4a06bbe7475ae6bf186df8af6e398e354de1e))
+* add `proxy` property to module options ([75697ee](https://github.com/adrianbrs/nest-oidc-provider/commit/75697ee5c22dee2fff2e654425ec121034946748)), closes [#9](https://github.com/adrianbrs/nest-oidc-provider/issues/9)
+
+
+
+## [1.0.7](https://github.com/adrianbrs/nest-oidc-provider/compare/1.0.6...1.0.7) (2022-09-16)
+
+
+
 ## [1.0.6](https://github.com/adrianbrs/nest-oidc-provider/compare/1.0.5...1.0.6) (2022-02-04)
 
 

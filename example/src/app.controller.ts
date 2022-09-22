@@ -26,12 +26,14 @@ export class AppController {
     if (session?.accountId) {
       const grant = await provider.Grant.find(session.grantIdFor('test'));
       return {
+        query: ctx.query,
         accountId: session.accountId,
-        scopes: grant.getOIDCScopeEncountered()
+        scopes: grant?.getOIDCScopeEncountered()
       }
     }
 
     return {
+      query: ctx.query,
       accountId: null,
       scopes: null
     }
@@ -42,7 +44,7 @@ export class AppController {
     const { code, error, error_description } = query;
 
     if (error) {
-      return res.json({ error, error_description })
+      return res.redirect(`/?error=${error}&error_description=${error_description}`);
     }
 
     if (!code) {

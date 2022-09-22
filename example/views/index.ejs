@@ -28,6 +28,19 @@
             </div>
           </div>
 
+          <%
+            if (query.error || query.error_description) { %>
+              <div class="row">
+                <div class="col">
+                  <div class="alert alert-danger mx-auto" style="max-width: 500px;">
+                    <p class="m-0"><strong>error:</strong> <%= query.error %></p>
+                    <p class="m-0"><strong>error_description:</strong> <%= query.error_description %></p>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          %>
+
           <div class="row">
             <div class="col">
               <div class="card mx-auto" style="width: 300px">

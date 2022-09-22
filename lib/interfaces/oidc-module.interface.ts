@@ -11,6 +11,7 @@ export interface OidcModuleOptions {
   version?: VersionValue;
   issuer: string;
   oidc?: OidcConfiguration;
+  proxy?: boolean;
   factory?: (
     issuer: string,
     config?: Configuration,

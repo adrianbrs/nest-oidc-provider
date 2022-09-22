@@ -68,7 +68,15 @@ export class OidcModule {
           moduleOptions.factory ||
           ((issuer, config) => new oidc.Provider(issuer, config));
 
-        return providerFactory(moduleOptions.issuer, moduleOptions.oidc);
+        const provider = await Promise.resolve(
+          providerFactory(moduleOptions.issuer, moduleOptions.oidc),
+        );
+
+        if (typeof moduleOptions.proxy === 'boolean') {
+          provider.proxy = moduleOptions.proxy;
+        }
+
+        return provider;
       },
       inject: [OIDC_MODULE_OPTIONS],
     };

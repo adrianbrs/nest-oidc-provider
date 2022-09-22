@@ -61,6 +61,25 @@ You can pass a `factory` function to customize the provider instantiation.
 export class AppModule {}
 ```
 
+### Trusting TLS offloading proxies
+
+You can set the `proxy` option to `true` to trust TLS offloading proxies.\
+For more info visit the `oidc-provider` documentation: [Trusting TLS offloading proxies](https://github.com/panva/node-oidc-provider/blob/v7.12.0/docs/README.md#trusting-tls-offloading-proxies)
+
+```ts
+@Module({
+  imports: [
+    OidcModule.forRoot({
+      issuer: 'http://localhost:3000',
+      path: '/oidc',
+      proxy: true, // <= trust TLS offloading proxies
+      oidc: {...}
+    })
+  ],
+})
+export class AppModule {}
+```
+
 ### Async configuration
 
 #### `useFactory`

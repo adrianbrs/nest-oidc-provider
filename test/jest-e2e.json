@@ -4,6 +4,7 @@
   "rootDir": "../",
   "verbose": true,
   "testMatch": ["<rootDir>/test/**/*.e2e-spec.ts"],
+  "modulePathIgnorePatterns": ["<rootDir>/example"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },

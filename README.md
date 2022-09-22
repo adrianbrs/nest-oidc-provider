@@ -15,7 +15,9 @@
 ```bash
 $ npm i --save nest-oidc-provider oidc-provider
 ```
+
 OR
+
 ```bash
 $ yarn add nest-oidc-provider oidc-provider
 ```
@@ -23,6 +25,7 @@ $ yarn add nest-oidc-provider oidc-provider
 ## Setup
 
 ### Basic configuration
+
 ```ts
 @Module({
   imports: [
@@ -36,8 +39,51 @@ $ yarn add nest-oidc-provider oidc-provider
 export class AppModule {}
 ```
 
+### Custom factory function
+
+You can pass a `factory` function to customize the provider instantiation.
+
+```ts
+@Module({
+  imports: [
+    OidcModule.forRoot({
+      issuer: 'http://localhost:3000',
+      path: '/oidc',
+      factory: (issuer, config) => {
+        const provider = new oidc.Provider(issuer, config);
+        provider.on('server_error', (ctx, err) => {...})
+        return provider;
+      },
+      oidc: ... // oidc-provider configuration
+    })
+  ],
+})
+export class AppModule {}
+```
+
+### Trusting TLS offloading proxies
+
+You can set the `proxy` option to `true` to trust TLS offloading proxies.\
+For more info visit the `oidc-provider` documentation: [Trusting TLS offloading proxies](https://github.com/panva/node-oidc-provider/blob/v7.12.0/docs/README.md#trusting-tls-offloading-proxies)
+
+```ts
+@Module({
+  imports: [
+    OidcModule.forRoot({
+      issuer: 'http://localhost:3000',
+      path: '/oidc',
+      proxy: true, // <= trust TLS offloading proxies
+      oidc: {...}
+    })
+  ],
+})
+export class AppModule {}
+```
+
 ### Async configuration
+
 #### `useFactory`
+
 ```ts
 @Module({
   imports: [
@@ -67,6 +113,7 @@ export class AppModule {}
 })
 export class AppModule {}
 ```
+
 Note that in this example, the `OidcConfigService` has to implement the `OidcModuleOptionsFactory` interface, as shown below.
 
 ```ts
@@ -87,6 +134,7 @@ export class OidcConfigService implements OidcModuleOptionsFactory {
   }
 }
 ```
+
 You can omit the `Adapter` option of oidc-provider configuration if you implement the `createAdapterFactory` method.
 
 #### `useExisting`
@@ -124,24 +172,27 @@ async login(
 ```
 
 The `InteractionHelper` class is just a helper that omits the `req` and `res` parameters from the existing interaction methods in `oidc-provider`.
+
 ```ts
 interface InteractionHelper {
-  details(): Promise<InteractionDetails>
+  details(): Promise<InteractionDetails>;
 
   finished(
     result: InteractionResults,
     options?: { mergeWithLastSubmission?: boolean },
-  ): Promise<void>
+  ): Promise<void>;
 
   result(
     result: InteractionResults,
     options?: { mergeWithLastSubmission?: boolean },
-  ): Promise<string>
+  ): Promise<string>;
 }
 ```
 
 ### `@Oidc.Context()`
+
 Returns an instance of `KoaContextWithOIDC`.
+
 ```ts
 @Get()
 async index(@Oidc.Context() ctx: KoaContextWithOIDC) {
@@ -152,12 +203,15 @@ async index(@Oidc.Context() ctx: KoaContextWithOIDC) {
 ```
 
 ## Examples
+
 A complete example can be found in the [example](example) directory.
 
 ## Contributing
+
 You are welcome to contribute to this project, just open a PR.
 
 ## CHANGELOG
+
 See [CHANGELOG](CHANGELOG.md) for more information.
 
 ## License

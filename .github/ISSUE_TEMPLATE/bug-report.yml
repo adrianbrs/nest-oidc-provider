@@ -60,28 +60,11 @@ body:
       value: |
         ---
 
-  - type: checkboxes
-    attributes:
-      label: 'Package'
-      description: |
-        Which package (or packages) do you think your issue is related to?
-      options:
-        - label: '<code>oidc-provider</code>'
-        - label: '<code>nest-oidc-provider</code>'
-        - label: "I don't know. Or some 3rd-party package"
-        - label: 'Other (see below)'
-
-  - type: input
-    attributes:
-      label: 'Other package'
-      description: 'If your issue is related to some package that is not listed above, write its name here'
-
   - type: input
     attributes:
       label: 'NestJS version'
       description: |
         Which version of `@nestjs/core` are you using?
-        **Tip**: Make sure that all of yours `@nestjs/*` dependencies are in sync!
       placeholder: '8.1.3'
 
   - type: textarea
@@ -90,8 +73,8 @@ body:
     attributes:
       label: 'Packages versions'
       description: |
-        You could leave your whole `package.json` dependencies list here, or just indicate which version of `@nestjs/*` you are using
-        **Tip**: run _npx nest info_
+        You could leave your whole `package.json` dependencies list here, or just indicate which version of `oidc-provider` and `nest-oidc-provider` you are using
+        **Tip**: run _npm list oidc-provider_
       value: |
         ```json
 

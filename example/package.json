@@ -27,7 +27,7 @@
     "axios": "^0.25.0",
     "lru-cache": "^6.0.0",
     "nest-oidc-provider": "^1.1.1",
-    "oidc-provider": "^7.10.6",
+    "oidc-provider": "^7.13.0",
     "query-string": "^7.1.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

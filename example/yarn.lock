@@ -4225,7 +4225,7 @@ object-inspect@^1.9.0:
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.12.2.tgz#c0641f26394532f28ab8d796ab954e43c009a8ea"
   integrity sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==
 
-oidc-provider@^7.10.6:
+oidc-provider@^7.13.0:
   version "7.14.1"
   resolved "https://registry.yarnpkg.com/oidc-provider/-/oidc-provider-7.14.1.tgz#f999c72a5dd098b7564fdabe582389a2bf031024"
   integrity sha512-zSQ3kPaCyE2XIp1xlrObGM6lUb8FTJ+iXavAN09uICemudasiuTjGLhR9YeaQ89JG1b+gNXWpvQe5yOe2Gdp+g==
@@ -5424,7 +5424,7 @@ typescript@4.2.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.3.tgz#39062d8019912d43726298f09493d598048c1ce3"
   integrity sha512-qOcYwxaByStAWrBf4x0fibwZvMRG+r4cQoTjbPtUlrWjBHbmCAww1i448U0GJ+3cNNEtebDteo/cHOR3xJ4wEw==
 
-typescript@^4.9.3:
+typescript@^4.8.4:
   version "4.9.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.3.tgz#3aea307c1746b8c384435d8ac36b8a2e580d85db"
   integrity sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==

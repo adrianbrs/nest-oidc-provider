@@ -61,6 +61,24 @@ body:
         ---
 
   - type: input
+    validations:
+      required: true
+    attributes:
+      label: 'oidc-provider version'
+      description: |
+        Which version of `oidc-provider` are you using?
+      placeholder: '7.0.0'
+
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: 'nest-oidc-provider version'
+      description: |
+        Which version of `nest-oidc-provider` are you using?
+      placeholder: '1.1.1'
+
+  - type: input
     attributes:
       label: 'NestJS version'
       description: |
@@ -68,13 +86,10 @@ body:
       placeholder: '8.1.3'
 
   - type: textarea
-    validations:
-      required: true
     attributes:
       label: 'Packages versions'
       description: |
-        You could leave your whole `package.json` dependencies list here, or just indicate which version of `oidc-provider` and `nest-oidc-provider` you are using
-        **Tip**: run _npm list oidc-provider_
+        You could leave your whole `package.json` dependencies list here
       value: |
         ```json
 

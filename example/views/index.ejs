@@ -28,50 +28,75 @@
             </div>
           </div>
 
-          <%
-            if (query.error || query.error_description) { %>
-              <div class="row">
-                <div class="col">
-                  <div class="alert alert-danger mx-auto" style="max-width: 500px;">
-                    <p class="m-0"><strong>error:</strong> <%= query.error %></p>
-                    <p class="m-0"><strong>error_description:</strong> <%= query.error_description %></p>
-                  </div>
-                </div>
+          <% if (query.error || query.error_description) { %>
+          <div class="row">
+            <div class="col">
+              <div class="alert alert-danger mx-auto" style="max-width: 500px">
+                <p class="m-0"><strong>error:</strong> <%= query.error %></p>
+                <p class="m-0">
+                  <strong>error_description:</strong> <%=
+                  query.error_description %>
+                </p>
               </div>
-            <% } %>
-          %>
+            </div>
+          </div>
+          <% } %> %>
 
           <div class="row">
             <div class="col">
               <div class="card mx-auto" style="width: 300px">
                 <div class="card-body text-center">
                   <div class="mb-3 pb-2 border-bottom">
-                    <h5 class="card-title mb-0">Welcome<% if (accountId) {%> <strong><%= accountId %></strong> <%} %>!</h5>
+                    <h5 class="card-title mb-0">
+                      Welcome<% if (accountId) {%>
+                      <strong><%= accountId %></strong> <%} %>!
+                    </h5>
 
                     <% if (scopes) { %>
-                      <div class="text-start mt-4">
-                        <h6 class="mb-0">Granted scopes:</h6>
-                        <ul>
-                          <% for (const scopeName of scopes.trim().replace(/\s+/, ' ').split(' ')) { %>
-                            <li><%= scopeName %></li>
-                          <% } %>
-                        </ul>
-                      </div>
-                    <% } %>
-
-                    <% if (accountId) { %>
-                      <a href="http://localhost:3001/oidc/session/end" class="btn btn-warning w-100">Logout</a>
+                    <div class="text-start mt-4">
+                      <h6 class="mb-0">Granted scopes:</h6>
+                      <ul>
+                        <% for (const scopeName of scopes.trim().replace(/\s+/,
+                        ' ').split(' ')) { %>
+                        <li><%= scopeName %></li>
+                        <% } %>
+                      </ul>
+                    </div>
+                    <% } %> <% if (accountId) { %>
+                    <a
+                      href="<%= origin %>/oidc/session/end"
+                      class="btn btn-warning w-100"
+                      >Logout</a
+                    >
                     <% } %>
                   </div>
 
                   <div class="mb-4 text-start">
                     <label for="scopes">Scopes:</label>
-                    <input class="form-control" type="text" id="scopes" placeholder="openid email" value="openid email">
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="scopes"
+                      placeholder="openid email"
+                      value="openid email"
+                    />
                   </div>
 
-                  <button id="signin" class="btn btn-success w-100">Click here to authenticate</button>
+                  <button id="signin" class="btn btn-success w-100">
+                    Click here to authenticate
+                  </button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col text-center">
+              <a
+                href="<%= origin %>/oidc/.well-known/openid-configuration"
+                target="_blank"
+                >.well-known/openid-configuration</a
+              >
             </div>
           </div>
         </div>
@@ -79,14 +104,15 @@
     </div>
 
     <script>
-      const btn = document.getElementById('signin')
+      const btn = document.getElementById('signin');
       const scopesInput = document.getElementById('scopes');
-      const baseUrl = '/oidc/auth?client_id=test&response_type=code&redirect_uri=http://localhost:3001/callback'
+      const baseUrl =
+        '/oidc/auth?client_id=test&response_type=code&redirect_uri=<%= origin %>/callback';
 
       btn.onclick = () => {
-        const scopes = scopesInput.value.replace(/\s+/, ' ')
-        window.location = `${baseUrl}&scope=${scopes || 'openid email'}`
-      }
+        const scopes = scopesInput.value.replace(/\s+/, ' ');
+        window.location = `${baseUrl}&scope=${scopes || 'openid email'}`;
+      };
     </script>
 
     <script

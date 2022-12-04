@@ -8,35 +8,37 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { Oidc } from 'nest-oidc-provider'
+import { Oidc } from 'nest-oidc-provider';
 import { KoaContextWithOIDC } from 'oidc-provider';
 import axios from 'axios';
 import qs from 'query-string';
 
 @Controller()
 export class AppController {
-  private readonly logger = new Logger(AppController.name)
+  private readonly logger = new Logger(AppController.name);
 
   @Get('/')
   @Render('index')
   async index(@Oidc.Context() ctx: KoaContextWithOIDC) {
-    const { oidc: { provider } } = ctx;
+    const {
+      oidc: { provider },
+    } = ctx;
     const session = await provider.Session.get(ctx);
+
+    const res: Record<string, any> = {
+      query: ctx.query,
+      accountId: null,
+      scopes: null,
+      origin: ctx.URL.origin,
+    };
 
     if (session?.accountId) {
       const grant = await provider.Grant.find(session.grantIdFor('test'));
-      return {
-        query: ctx.query,
-        accountId: session.accountId,
-        scopes: grant?.getOIDCScopeEncountered()
-      }
+      res.accountId = session.accountId;
+      res.scopes = grant?.getOIDCScopeEncountered();
     }
 
-    return {
-      query: ctx.query,
-      accountId: null,
-      scopes: null
-    }
+    return res;
   }
 
   @Get('/callback')
@@ -44,7 +46,9 @@ export class AppController {
     const { code, error, error_description } = query;
 
     if (error) {
-      return res.redirect(`/?error=${error}&error_description=${error_description}`);
+      return res.redirect(
+        `/?error=${error}&error_description=${error_description}`,
+      );
     }
 
     if (!code) {
@@ -69,7 +73,7 @@ export class AppController {
         },
       );
 
-      res.redirect('/')
+      res.redirect('/');
     } catch (err) {
       this.logger.error('Could not get token:', err);
       res

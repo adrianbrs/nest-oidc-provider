@@ -1,7 +1,7 @@
 import { INestApplication, Provider } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { IncomingMessage, ServerResponse } from 'http';
-import { OidcService } from './oidc.service';
+import { OidcService } from './oidc.service.js';
 import * as oidc from 'oidc-provider';
 
 jest.unmock('oidc-provider');

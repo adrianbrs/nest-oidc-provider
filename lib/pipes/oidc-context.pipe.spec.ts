@@ -1,9 +1,9 @@
 import { ExecutionContext, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { OidcModule } from '../oidc.module';
+import { OidcModule } from '../oidc.module.js';
 import { Provider } from 'oidc-provider';
-import { OidcService } from '../oidc.service';
-import { OidcContextPipe } from './oidc-context.pipe';
+import { OidcService } from '../oidc.service.js';
+import { OidcContextPipe } from './oidc-context.pipe.js';
 import { createMock } from '@golevelup/ts-jest';
 import { IncomingMessage, ServerResponse } from 'http';
 

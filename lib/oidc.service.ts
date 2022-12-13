@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { IncomingMessage, ServerResponse } from 'http';
-import { Session } from './types/oidc.types';
-import * as oidc from 'oidc-provider';
+import type { Session } from './types/oidc.types';
+import Provider, { KoaContextWithOIDC } from 'oidc-provider';
 
 @Injectable()
 export class OidcService {
-  constructor(public readonly provider: oidc.Provider) {}
+  constructor(public readonly provider: Provider) {}
 
   getContext(req: IncomingMessage, res: ServerResponse) {
-    const ctx = this.provider.app.createContext(
-      req,
-      res,
-    ) as oidc.KoaContextWithOIDC;
+    const ctx = this.provider.app.createContext(req, res) as KoaContextWithOIDC;
     Object.defineProperty(ctx, 'oidc', {
       value: new this.provider.OIDCContext(ctx),
     });

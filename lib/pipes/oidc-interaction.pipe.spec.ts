@@ -1,10 +1,10 @@
 import { ExecutionContext, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { OidcModule } from '../oidc.module';
+import { OidcModule } from '../oidc.module.js';
 import { KoaContextWithOIDC, Provider } from 'oidc-provider';
-import { OidcService } from '../oidc.service';
+import { OidcService } from '../oidc.service.js';
 import { createMock } from '@golevelup/ts-jest';
-import { OidcInteractionHelperPipe } from './oidc-interaction.pipe';
+import { OidcInteractionHelperPipe } from './oidc-interaction.pipe.js';
 
 jest.mock('oidc-provider', () => ({
   Provider: jest.fn<Partial<Provider>, ConstructorParameters<typeof Provider>>(

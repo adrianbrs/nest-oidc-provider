@@ -6,16 +6,16 @@ import {
   Provider,
   Type,
 } from '@nestjs/common';
-import {
+import type {
   OidcModuleAsyncOptions,
   OidcModuleOptions,
   OidcModuleOptionsFactory,
 } from './interfaces/oidc-module.interface';
-import { OIDC_MODULE_OPTIONS } from './oidc.constants';
-import { OidcController } from './oidc.controller';
-import { OidcService } from './oidc.service';
-import { validatePath } from './common/oidc.utils';
-import * as oidc from 'oidc-provider';
+import { OIDC_MODULE_OPTIONS } from './oidc.constants.js';
+import { OidcController } from './oidc.controller.js';
+import { OidcService } from './oidc.service.js';
+import { validatePath } from './common/oidc.utils.js';
+import OidcProvider from 'oidc-provider';
 
 @Global()
 @Module({
@@ -55,7 +55,7 @@ export class OidcModule {
 
   private static createOidcProvider(): Provider {
     return {
-      provide: oidc.Provider,
+      provide: OidcProvider,
       useFactory: async (moduleOptions: OidcModuleOptions): Promise<any> => {
         // Change controller path manually until Nest doesn't provide an official way for this
         // (see https://github.com/nestjs/nest/issues/1438)
@@ -66,7 +66,7 @@ export class OidcModule {
 
         const providerFactory =
           moduleOptions.factory ||
-          ((issuer, config) => new oidc.Provider(issuer, config));
+          ((issuer, config) => new OidcProvider(issuer, config));
 
         const provider = await Promise.resolve(
           providerFactory(moduleOptions.issuer, moduleOptions.oidc),

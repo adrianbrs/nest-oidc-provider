@@ -5,7 +5,9 @@
   "author": "Adrian Cerbaro <adriancerbaro@gmail.com>",
   "license": "MIT",
   "private": false,
+  "type": "module",
   "homepage": "https://github.com/adrianbrs/nest-oidc-provider#readme",
+  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/adrianbrs/nest-oidc-provider"
@@ -50,7 +52,7 @@
     "@types/jest": "^27.4.0",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^17.0.14",
-    "@types/oidc-provider": "^7.8.1",
+    "@types/oidc-provider": "^8.0.0",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
     "@typescript-eslint/parser": "^5.10.2",
@@ -76,8 +78,11 @@
   "peerDependencies": {
     "@nestjs/common": ">=8.0.0",
     "@nestjs/core": ">=8.0.0",
-    "oidc-provider": ">=7.0.0",
+    "oidc-provider": ">=8.0.0",
     "reflect-metadata": "^0.1.13"
+  },
+  "exports": {
+    ".": "./index.js"
   },
   "engines": {
     "node": ">= 12.9.0"

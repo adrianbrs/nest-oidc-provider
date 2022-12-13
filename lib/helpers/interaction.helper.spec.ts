@@ -1,12 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { OidcModule } from '../oidc.module';
+import { OidcModule } from '../oidc.module.js';
 import {
   InteractionResults,
   KoaContextWithOIDC,
   Provider,
 } from 'oidc-provider';
-import { InteractionHelper } from './interaction.helper';
+import { InteractionHelper } from './interaction.helper.js';
 
 jest.mock('oidc-provider', () => ({
   Provider: jest.fn<Partial<Provider>, ConstructorParameters<typeof Provider>>(

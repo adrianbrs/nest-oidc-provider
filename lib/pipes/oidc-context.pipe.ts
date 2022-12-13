@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable, PipeTransform } from '@nestjs/common';
 import { KoaContextWithOIDC } from 'oidc-provider';
-import { getReqRes } from '../common/oidc.utils';
-import { OidcService } from '../oidc.service';
+import { getReqRes } from '../common/oidc.utils.js';
+import { OidcService } from '../oidc.service.js';
 
 @Injectable()
 export class OidcContextPipe

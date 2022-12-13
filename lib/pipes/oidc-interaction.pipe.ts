@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable, PipeTransform } from '@nestjs/common';
-import { InteractionHelper } from '../helpers/interaction.helper';
-import { getReqRes } from '../common/oidc.utils';
-import { OidcService } from '../oidc.service';
+import { InteractionHelper } from '../helpers/interaction.helper.js';
+import { getReqRes } from '../common/oidc.utils.js';
+import { OidcService } from '../oidc.service.js';
 
 @Injectable()
 export class OidcInteractionHelperPipe implements PipeTransform {

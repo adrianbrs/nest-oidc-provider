@@ -7,10 +7,10 @@ import {
   VERSION_NEUTRAL,
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { OidcController } from './oidc.controller';
+import { OidcController } from './oidc.controller.js';
 import { Provider } from 'oidc-provider';
 import { Request, Response } from 'express';
-import { OidcModule } from './oidc.module';
+import { OidcModule } from './oidc.module.js';
 
 jest.mock('oidc-provider', () => ({
   Provider: jest.fn<Partial<Provider>, ConstructorParameters<typeof Provider>>(

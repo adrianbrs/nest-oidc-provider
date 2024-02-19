@@ -10,13 +10,10 @@ export type * from 'oidc-provider';
 export type Provider = _Provider;
 export type ProviderClass = typeof _Provider;
 
-export type Errors = typeof errors;
-export type InteractionPolicy = typeof interactionPolicy;
-
 export type ProviderModule = {
   Provider: ProviderClass;
-  errors: Errors;
-  interactionPolicy: InteractionPolicy;
+  errors: typeof errors;
+  interactionPolicy: typeof interactionPolicy;
 };
 
 //===================================//

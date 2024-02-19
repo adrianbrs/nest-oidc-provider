@@ -1,18 +1,19 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppAsyncFactoryModule } from '../src/app-async-factory.module';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
-import { Provider } from 'oidc-provider';
-import { DatabaseService } from '../src/database/database.service';
 import request from 'supertest';
+import type TestAgent from 'supertest/lib/agent';
+import { OIDC_PROVIDER } from '../../lib';
+import { AppAsyncFactoryModule } from '../src/app-async-factory.module';
+import { DatabaseService } from '../src/database/database.service';
 
 describe('[E2E] OidcModule - async configuration (useFactory)', () => {
   let app: INestApplication;
   let server: Server;
   let address: AddressInfo;
   let baseURL: string;
-  let agent: request.SuperAgentTest;
+  let agent: TestAgent;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -45,7 +46,7 @@ describe('[E2E] OidcModule - async configuration (useFactory)', () => {
   });
 
   it('should save a grant through the adapter', async () => {
-    const provider = app.get(Provider);
+    const provider = app.get(OIDC_PROVIDER);
     const dbService = app.get(DatabaseService, { strict: false });
 
     const grant = new provider.Grant({

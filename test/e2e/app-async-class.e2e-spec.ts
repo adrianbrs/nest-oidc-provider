@@ -1,12 +1,12 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppAsyncClassModule } from '../src/app-async-class.module';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
-import { ISSUER } from '../src/constants';
-import { Provider } from 'oidc-provider';
-import { DatabaseService } from '../src/database/database.service';
 import request from 'supertest';
+import { OIDC_PROVIDER } from '../../lib';
+import { AppAsyncClassModule } from '../src/app-async-class.module';
+import { ISSUER } from '../src/constants';
+import { DatabaseService } from '../src/database/database.service';
 
 describe('[E2E] OidcModule - async configuration (useClass)', () => {
   let app: INestApplication;
@@ -44,7 +44,7 @@ describe('[E2E] OidcModule - async configuration (useClass)', () => {
   });
 
   it('should save a grant through the adapter', async () => {
-    const provider = app.get(Provider);
+    const provider = app.get(OIDC_PROVIDER);
     const dbService = app.get(DatabaseService, { strict: false });
 
     const grant = new provider.Grant({

@@ -1,13 +1,14 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppAsyncClassModule } from '../src/app-async-class.module';
 import { Server } from 'http';
 import request from 'supertest';
+import type TestAgent from 'supertest/lib/agent';
+import { AppAsyncClassModule } from '../src/app-async-class.module';
 
 describe('[E2E] OidcModule - authorization code flow', () => {
   let app: INestApplication;
   let server: Server;
-  let agent: request.SuperAgentTest;
+  let agent: TestAgent;
   let interactionURL: string;
 
   beforeAll(async () => {

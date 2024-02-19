@@ -1,32 +1,13 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { OIDC_PROVIDER } from '../oidc.constants';
 import { OidcModule } from '../oidc.module';
 import {
   InteractionResults,
   KoaContextWithOIDC,
   Provider,
-} from 'oidc-provider';
+} from '../types/oidc.types';
 import { InteractionHelper } from './interaction.helper';
-
-jest.mock('oidc-provider', () => ({
-  Provider: jest.fn<Partial<Provider>, ConstructorParameters<typeof Provider>>(
-    issuer => ({
-      issuer,
-      callback: jest.fn(() => jest.fn()),
-      OIDCContext: jest.fn<any, any[]>(() => ({
-        session: {
-          accountId: 'test',
-        },
-      })),
-      app: {
-        createContext: jest.fn<any, any[]>(() => ({})),
-      } as any,
-      interactionDetails: jest.fn(),
-      interactionFinished: jest.fn(),
-      interactionResult: jest.fn(),
-    }),
-  ),
-}));
 
 describe('InteractionHelper', () => {
   let app: INestApplication;
@@ -43,12 +24,28 @@ describe('InteractionHelper', () => {
       imports: [
         OidcModule.forRoot({
           issuer: '',
+          factory: ({ issuer }) =>
+            ({
+              issuer,
+              callback: jest.fn(() => jest.fn()),
+              OIDCContext: jest.fn<any, any[]>(() => ({
+                session: {
+                  accountId: 'test',
+                },
+              })),
+              app: {
+                createContext: jest.fn<any, any[]>(() => ({})),
+              } as any,
+              interactionDetails: jest.fn(),
+              interactionFinished: jest.fn(),
+              interactionResult: jest.fn(),
+            }) as unknown as Provider,
         }),
       ],
     }).compile();
 
     app = moduleRef.createNestApplication();
-    provider = app.get(Provider);
+    provider = app.get(OIDC_PROVIDER);
 
     fakeOidcCtx = {
       oidc: {

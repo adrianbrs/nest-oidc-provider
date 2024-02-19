@@ -1,11 +1,11 @@
-import { HttpStatus, INestApplication, VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
+import { HttpStatus, INestApplication, VERSION_NEUTRAL, VersioningType } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
-import { ISSUER } from '../src/constants';
-import { AppModule } from '../src/app.module';
-import { AppAsyncClassModule } from '../src/app-async-class.module';
 import request from 'supertest';
+import { AppAsyncClassModule } from '../src/app-async-class.module';
+import { AppModule } from '../src/app.module';
+import { ISSUER } from '../src/constants';
 
 describe('[E2E] OidcModule', () => {
   let app: INestApplication;

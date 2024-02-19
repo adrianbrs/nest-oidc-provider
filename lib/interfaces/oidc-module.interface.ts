@@ -1,10 +1,24 @@
-import { AdapterFactory, Configuration } from 'oidc-provider';
 import { ModuleMetadata, Type } from '@nestjs/common';
 import { VersionValue } from '@nestjs/common/interfaces';
-import * as oidc from 'oidc-provider';
+import {
+  AdapterFactory,
+  Configuration,
+  Provider,
+  ProviderModule,
+} from '../types/oidc.types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface OidcConfiguration extends Configuration {}
+
+export interface OidcModuleFactoryArgs {
+  issuer: string;
+  config?: Configuration;
+  module: ProviderModule;
+}
+
+export type OidcModuleFactoryFn = (
+  args: OidcModuleFactoryArgs,
+) => Provider | Promise<Provider>;
 
 export interface OidcModuleOptions {
   path?: string;
@@ -12,10 +26,7 @@ export interface OidcModuleOptions {
   issuer: string;
   oidc?: OidcConfiguration;
   proxy?: boolean;
-  factory?: (
-    issuer: string,
-    config?: Configuration,
-  ) => oidc.Provider | Promise<oidc.Provider>;
+  factory?: OidcModuleFactoryFn;
 }
 
 export interface OidcModuleOptionsFactory {

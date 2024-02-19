@@ -1,10 +1,10 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Server } from 'http';
+import { OidcModuleFactoryFn } from 'lib';
 import { AddressInfo } from 'net';
-import { AppModule } from '../src/app.module';
 import request from 'supertest';
-import * as oidc from 'oidc-provider';
+import { AppModule } from '../src/app.module';
 
 describe('[E2E] OidcModule - proxy', () => {
   let app: INestApplication;
@@ -16,8 +16,8 @@ describe('[E2E] OidcModule - proxy', () => {
   const PROXY_HOST = 'test.example.com';
   const PROXY_PROTO = 'https';
 
-  const factory = (issuer: string, config?: oidc.Configuration) => {
-    const provider = new oidc.Provider(issuer, config);
+  const factory: OidcModuleFactoryFn = ({ issuer, config, module }) => {
+    const provider = new module.Provider(issuer, config);
     provider.use((ctx, next) => {
       ctx.response.set('X-Forwarded-Proto', ctx.request.protocol);
       ctx.response.set('X-Forwarded-Host', ctx.request.hostname);

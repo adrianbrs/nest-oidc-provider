@@ -7,11 +7,12 @@ const GetExecutionContext = createParamDecorator(
 );
 
 /**
- * Get KoaContextWithOIDC
+ * Get a new `KoaContextWithOIDC` instance
  */
-export const Context = () => GetExecutionContext(OidcContextPipe);
+export const OidcContext = () => GetExecutionContext(OidcContextPipe);
 
 /**
- * Get a new interaction helper instance
+ * Get a new `InteractionHelper` instance
  */
-export const Interaction = () => GetExecutionContext(OidcInteractionHelperPipe);
+export const OidcInteraction = () =>
+  GetExecutionContext(OidcInteractionHelperPipe);

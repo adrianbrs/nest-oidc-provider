@@ -1,4 +1,4 @@
-import { Adapter, AdapterPayload } from 'oidc-provider';
+import { Adapter, AdapterPayload } from '../../../lib';
 import { DatabaseService } from '../database/database.service';
 
 export class TestAdapter implements Adapter {

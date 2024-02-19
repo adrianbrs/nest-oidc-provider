@@ -1,8 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "sourceMap": false,
+    "module": "ESNext",
+    "target": "ESNext",
     "rootDir": "./lib"
   },
-  "exclude": ["lib/**/*.spec.ts", "jest.config.ts"]
+  "exclude": ["jest.config.ts"]
 }

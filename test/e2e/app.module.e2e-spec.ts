@@ -1,18 +1,19 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppModule } from '../src/app.module';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
-import { ISSUER, STATIC_DB_SERVICE } from '../src/constants';
-import { Provider } from 'oidc-provider';
 import request from 'supertest';
+import type TestAgent from 'supertest/lib/agent';
+import { OIDC_PROVIDER } from '../../lib';
+import { AppModule } from '../src/app.module';
+import { ISSUER, STATIC_DB_SERVICE } from '../src/constants';
 
 describe('[E2E] OidcModule - forRoot()', () => {
   let app: INestApplication;
   let server: Server;
   let address: AddressInfo;
   let baseURL: string;
-  let agent: request.SuperAgentTest;
+  let agent: TestAgent;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -48,7 +49,7 @@ describe('[E2E] OidcModule - forRoot()', () => {
   });
 
   it('should save a grant through the adapter', async () => {
-    const provider = app.get(Provider);
+    const provider = app.get(OIDC_PROVIDER);
 
     const grant = new provider.Grant({
       accountId: 'test',

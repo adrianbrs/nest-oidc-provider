@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AdapterFactory } from 'oidc-provider';
-import { OidcModuleOptions, OidcModuleOptionsFactory } from '../../../lib';
+import { AdapterFactory, OidcModuleOptions, OidcModuleOptionsFactory } from '../../../lib';
 import { TestAdapter } from '../adapters/test.adapter';
 import { BASE_OPTIONS } from '../constants';
 import { DatabaseService } from '../database/database.service';

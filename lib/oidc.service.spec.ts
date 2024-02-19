@@ -1,15 +1,14 @@
 import { INestApplication, Provider } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { IncomingMessage, ServerResponse } from 'http';
+import { Provider as OidcProvider } from 'lib/types/oidc.types';
+import { OIDC_PROVIDER } from './oidc.constants';
 import { OidcService } from './oidc.service';
-import * as oidc from 'oidc-provider';
-
-jest.unmock('oidc-provider');
 
 describe('OidcService', () => {
   let app: INestApplication;
   let service: OidcService;
-  let oidcInstance: oidc.Provider;
+  let oidcInstance: OidcProvider;
   let req: IncomingMessage;
   let res: ServerResponse;
 
@@ -32,7 +31,7 @@ describe('OidcService', () => {
     res = jest.fn() as any;
 
     const oidcProvider: Provider = {
-      provide: oidc.Provider,
+      provide: OIDC_PROVIDER,
       useValue: oidcInstance,
     };
 

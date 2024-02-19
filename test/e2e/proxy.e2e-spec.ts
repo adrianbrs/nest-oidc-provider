@@ -51,23 +51,21 @@ describe('[E2E] OidcModule - proxy', () => {
       await app.close();
     });
 
-    it('should NOT TRUST proxy headers', done => {
-      request(server)
+    it('should NOT TRUST proxy headers', async () => {
+      const res = await request(server)
         .get(`/oidc/.well-known/openid-configuration`)
         .set('X-Forwarded-For', PROXY_FOR)
         .set('X-Forwarded-Host', PROXY_HOST)
         .set('X-Forwarded-Proto', PROXY_PROTO)
-        .expect(HttpStatus.OK)
-        .end((_err, res) => {
-          const proxyFor = res.headers['x-forwarded-for'];
-          const proxyHost = res.headers['x-forwarded-host'];
-          const proxyProto = res.headers['x-forwarded-proto'];
+        .expect(HttpStatus.OK);
 
-          expect(proxyFor).not.toEqual(PROXY_FOR);
-          expect(proxyHost).not.toEqual(PROXY_HOST);
-          expect(proxyProto).not.toEqual(PROXY_PROTO);
-          done();
-        });
+      const proxyFor = res.headers['x-forwarded-for'];
+      const proxyHost = res.headers['x-forwarded-host'];
+      const proxyProto = res.headers['x-forwarded-proto'];
+
+      expect(proxyFor).not.toEqual(PROXY_FOR);
+      expect(proxyHost).not.toEqual(PROXY_HOST);
+      expect(proxyProto).not.toEqual(PROXY_PROTO);
     });
   });
 
@@ -95,26 +93,24 @@ describe('[E2E] OidcModule - proxy', () => {
       await app.close();
     });
 
-    it('should TRUST proxy headers', done => {
-      request(server)
+    it('should TRUST proxy headers', async () => {
+      const res = await request(server)
         .get(`/oidc/.well-known/openid-configuration`)
         .set('X-Forwarded-For', PROXY_FOR)
         .set('X-Forwarded-Host', PROXY_HOST)
         .set('X-Forwarded-Proto', PROXY_PROTO)
-        .expect(HttpStatus.OK)
-        .end((_err, res) => {
-          const proxyFor = res.headers['x-forwarded-for'];
-          const proxyHost = res.headers['x-forwarded-host'];
-          const proxyProto = res.headers['x-forwarded-proto'];
+        .expect(HttpStatus.OK);
 
-          expect(proxyFor).toBeDefined();
-          expect(proxyHost).toBeDefined();
-          expect(proxyProto).toBeDefined();
-          expect(proxyFor).toEqual(PROXY_FOR);
-          expect(proxyHost).toEqual(PROXY_HOST);
-          expect(proxyProto).toEqual(PROXY_PROTO);
-          done();
-        });
+      const proxyFor = res.headers['x-forwarded-for'];
+      const proxyHost = res.headers['x-forwarded-host'];
+      const proxyProto = res.headers['x-forwarded-proto'];
+
+      expect(proxyFor).toBeDefined();
+      expect(proxyHost).toBeDefined();
+      expect(proxyProto).toBeDefined();
+      expect(proxyFor).toEqual(PROXY_FOR);
+      expect(proxyHost).toEqual(PROXY_HOST);
+      expect(proxyProto).toEqual(PROXY_PROTO);
     });
   });
 });

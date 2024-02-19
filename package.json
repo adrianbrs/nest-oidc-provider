@@ -37,8 +37,8 @@
     "test:unit": "pnpm jest",
     "test:cov": "pnpm jest --coverage",
     "test:dev": "pnpm jest --watch",
-    "test:e2e": "pnpm jest -c ./test/jest-e2e.config.ts",
-    "test:e2e:dev": "pnpm jest -c ./test/jest-e2e.config.ts --watch",
+    "test:e2e": "pnpm jest -c ./test/jest-e2e.config.ts --runInBand",
+    "test:e2e:dev": "pnpm jest -c ./test/jest-e2e.config.ts --watch --runInBand",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "devDependencies": {

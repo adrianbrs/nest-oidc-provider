@@ -30,22 +30,17 @@ describe('[E2E] OidcModule - forRoot()', () => {
     baseURL = `http://127.0.0.1:${address.port}`;
   });
 
-  it('should return discovery metadata in .well-known endpoint', done => {
+  it('should return discovery metadata in .well-known endpoint', async () => {
     const authEndpoint = `${baseURL}/oidc/auth`;
 
-    agent
+    const { body } = await agent
       .get('/oidc/.well-known/openid-configuration')
-      .expect(HttpStatus.OK)
-      .end((err, { body }) => {
-        if (err) {
-          return done(err);
-        }
-        expect(body?.issuer).toEqual(ISSUER);
-        expect(body?.authorization_endpoint).toEqual(authEndpoint);
-        expect(body?.grant_types_supported).toEqual(['authorization_code']);
-        expect(body?.response_types_supported).toEqual(['code']);
-        done();
-      });
+      .expect(HttpStatus.OK);
+
+    expect(body?.issuer).toEqual(ISSUER);
+    expect(body?.authorization_endpoint).toEqual(authEndpoint);
+    expect(body?.grant_types_supported).toEqual(['authorization_code']);
+    expect(body?.response_types_supported).toEqual(['code']);
   });
 
   it('should save a grant through the adapter', async () => {

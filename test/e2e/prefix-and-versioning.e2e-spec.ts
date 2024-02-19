@@ -40,19 +40,17 @@ describe('[E2E] OidcModule', () => {
       await app.close();
     });
   
-    it('should get .well-known endpoint', done => {
+    it('should get .well-known endpoint', async () => {
       const authEndpoint = `${baseURL}/v3/oidc/auth`;
   
-      request(server)
+      const { body } = await request(server)
         .get(`/v3/oidc/.well-known/openid-configuration`)
-        .expect(HttpStatus.OK)
-        .end((_err, { body }) => {
-          expect(body?.issuer).toEqual(ISSUER);
-          expect(body?.authorization_endpoint).toEqual(authEndpoint);
-          expect(body?.grant_types_supported).toEqual(['authorization_code']);
-          expect(body?.response_types_supported).toEqual(['code']);
-          done();
-        });
+        .expect(HttpStatus.OK);
+
+      expect(body?.issuer).toEqual(ISSUER);
+      expect(body?.authorization_endpoint).toEqual(authEndpoint);
+      expect(body?.grant_types_supported).toEqual(['authorization_code']);
+      expect(body?.response_types_supported).toEqual(['code']);
     });
   })
 
@@ -80,19 +78,17 @@ describe('[E2E] OidcModule', () => {
       await app.close();
     });
   
-    it('should get .well-known endpoint', done => {
+    it('should get .well-known endpoint', async () => {
       const authEndpoint = `${baseURL}/v1/oidc/auth`;
   
-      request(server)
+      const { body } = await request(server)
         .get(`/v1/oidc/.well-known/openid-configuration`)
-        .expect(HttpStatus.OK)
-        .end((_err, { body }) => {
-          expect(body?.issuer).toEqual(ISSUER);
-          expect(body?.authorization_endpoint).toEqual(authEndpoint);
-          expect(body?.grant_types_supported).toEqual(['authorization_code']);
-          expect(body?.response_types_supported).toEqual(['code']);
-          done();
-        });
+        .expect(HttpStatus.OK);
+
+      expect(body?.issuer).toEqual(ISSUER);
+      expect(body?.authorization_endpoint).toEqual(authEndpoint);
+      expect(body?.grant_types_supported).toEqual(['authorization_code']);
+      expect(body?.response_types_supported).toEqual(['code']);
     });
   })
 
@@ -123,19 +119,17 @@ describe('[E2E] OidcModule', () => {
       await app.close();
     });
   
-    it('should get .well-known endpoint', done => {
+    it('should get .well-known endpoint', async () => {
       const authEndpoint = `${baseURL}/oidc/auth`;
   
-      request(server)
+      const { body } = await request(server)
         .get(`/${prefix}/oidc/.well-known/openid-configuration`)
-        .expect(HttpStatus.OK)
-        .end((_err, { body }) => {
-          expect(body?.issuer).toEqual(ISSUER);
-          expect(body?.authorization_endpoint).toEqual(authEndpoint);
-          expect(body?.grant_types_supported).toEqual(['authorization_code']);
-          expect(body?.response_types_supported).toEqual(['code']);
-          done();
-        });
+        .expect(HttpStatus.OK);
+
+      expect(body?.issuer).toEqual(ISSUER);
+      expect(body?.authorization_endpoint).toEqual(authEndpoint);
+      expect(body?.grant_types_supported).toEqual(['authorization_code']);
+      expect(body?.response_types_supported).toEqual(['code']);
     });
   })
 
@@ -167,19 +161,17 @@ describe('[E2E] OidcModule', () => {
       await app.close();
     });
 
-    it('should get .well-known endpoint', done => {
+    it('should get .well-known endpoint', async () => {
       const authEndpoint = `${baseURL}/oidc/auth`;
 
-      request(server)
+      const { body } = await request(server)
         .get(`/oidc/.well-known/openid-configuration`)
-        .expect(HttpStatus.OK)
-        .end((_err, { body }) => {
-          expect(body?.issuer).toEqual(ISSUER);
-          expect(body?.authorization_endpoint).toEqual(authEndpoint);
-          expect(body?.grant_types_supported).toEqual(['authorization_code']);
-          expect(body?.response_types_supported).toEqual(['code']);
-          done();
-        });
+        .expect(HttpStatus.OK);
+
+      expect(body?.issuer).toEqual(ISSUER);
+      expect(body?.authorization_endpoint).toEqual(authEndpoint);
+      expect(body?.grant_types_supported).toEqual(['authorization_code']);
+      expect(body?.response_types_supported).toEqual(['code']);
     });
   });
 
@@ -215,19 +207,17 @@ describe('[E2E] OidcModule', () => {
       await app.close();
     });
 
-    it('should get .well-known endpoint', done => {
+    it('should get .well-known endpoint', async () => {
       const authEndpoint = `${baseURL}/v1/auth`;
 
-      request(server)
+      const { body } = await request(server)
         .get(`/${prefix}/v1/.well-known/openid-configuration`)
-        .expect(HttpStatus.OK)
-        .end((_err, { body }) => {
-          expect(body?.issuer).toEqual(ISSUER);
-          expect(body?.authorization_endpoint).toEqual(authEndpoint);
-          expect(body?.grant_types_supported).toEqual(['authorization_code']);
-          expect(body?.response_types_supported).toEqual(['code']);
-          done();
-        });
+        .expect(HttpStatus.OK);
+
+      expect(body?.issuer).toEqual(ISSUER);
+      expect(body?.authorization_endpoint).toEqual(authEndpoint);
+      expect(body?.grant_types_supported).toEqual(['authorization_code']);
+      expect(body?.response_types_supported).toEqual(['code']);
     });
   });
 });

@@ -6,16 +6,22 @@ import {
   Provider,
   Type,
 } from '@nestjs/common';
+import { validatePath } from './common/oidc.utils';
+import { importOidcProvider } from './helpers/esm.helper';
 import {
   OidcModuleAsyncOptions,
+  OidcModuleFactoryFn,
   OidcModuleOptions,
   OidcModuleOptionsFactory,
 } from './interfaces/oidc-module.interface';
-import { OIDC_MODULE_OPTIONS } from './oidc.constants';
+import {
+  OIDC_MODULE_OPTIONS,
+  OIDC_PROVIDER,
+  OIDC_PROVIDER_MODULE,
+} from './oidc.constants';
 import { OidcController } from './oidc.controller';
 import { OidcService } from './oidc.service';
-import { validatePath } from './common/oidc.utils';
-import * as oidc from 'oidc-provider';
+import { ProviderModule } from './types/oidc.types';
 
 @Global()
 @Module({
@@ -24,7 +30,7 @@ import * as oidc from 'oidc-provider';
 })
 export class OidcModule {
   static forRoot(options: OidcModuleOptions): DynamicModule {
-    const oidcProvider = this.createOidcProvider();
+    const oidcProviders = this.createOidcProvider();
 
     return {
       module: OidcModule,
@@ -33,30 +39,44 @@ export class OidcModule {
           provide: OIDC_MODULE_OPTIONS,
           useValue: options,
         },
-        oidcProvider,
+        ...oidcProviders,
       ],
-      exports: [oidcProvider],
+      exports: [...oidcProviders],
       controllers: [OidcController],
     };
   }
 
   static forRootAsync(options: OidcModuleAsyncOptions): DynamicModule {
-    const asyncProviers = this.createAsyncProviders(options);
-    const oidcProvider = this.createOidcProvider();
+    const asyncProviders = this.createAsyncProviders(options);
+    const oidcProviders = this.createOidcProvider();
 
     return {
       module: OidcModule,
       imports: options.imports,
-      providers: [...asyncProviers, oidcProvider],
-      exports: [oidcProvider],
+      providers: [...asyncProviders, ...oidcProviders],
+      exports: [...oidcProviders],
       controllers: [OidcController],
     };
   }
 
-  private static createOidcProvider(): Provider {
-    return {
-      provide: oidc.Provider,
-      useFactory: async (moduleOptions: OidcModuleOptions): Promise<any> => {
+  private static createOidcProvider(): Provider[] {
+    // Dynamically import `oidc-provider` to avoid require ESM at runtime
+    // FIXME: This is a workaround for the current limitation of Nest that doesn't support ESM-only packages
+    const moduleProvider: Provider = {
+      provide: OIDC_PROVIDER_MODULE,
+      useFactory: async (): Promise<ProviderModule> =>
+        importOidcProvider().then(({ default: Provider, ...module }) => ({
+          Provider,
+          ...module,
+        })),
+    };
+
+    const oidcProvider: Provider = {
+      provide: OIDC_PROVIDER,
+      useFactory: async (
+        providerModule: ProviderModule,
+        moduleOptions: OidcModuleOptions,
+      ): Promise<any> => {
         // Change controller path manually until Nest doesn't provide an official way for this
         // (see https://github.com/nestjs/nest/issues/1438)
         Controller({
@@ -64,12 +84,16 @@ export class OidcModule {
           version: moduleOptions.version,
         })(OidcController);
 
-        const providerFactory =
+        const providerFactory: OidcModuleFactoryFn =
           moduleOptions.factory ||
-          ((issuer, config) => new oidc.Provider(issuer, config));
+          (({ issuer, config, module }) => new module.Provider(issuer, config));
 
         const provider = await Promise.resolve(
-          providerFactory(moduleOptions.issuer, moduleOptions.oidc),
+          providerFactory({
+            issuer: moduleOptions.issuer,
+            config: moduleOptions.oidc,
+            module: providerModule,
+          }),
         );
 
         if (typeof moduleOptions.proxy === 'boolean') {
@@ -78,8 +102,10 @@ export class OidcModule {
 
         return provider;
       },
-      inject: [OIDC_MODULE_OPTIONS],
+      inject: [OIDC_PROVIDER_MODULE, OIDC_MODULE_OPTIONS],
     };
+
+    return [moduleProvider, oidcProvider];
   }
 
   private static createAsyncProviders(

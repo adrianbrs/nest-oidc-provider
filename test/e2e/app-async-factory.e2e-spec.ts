@@ -1,18 +1,19 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppAsyncFactoryModule } from '../src/app-async-factory.module';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
-import { Provider } from 'oidc-provider';
-import { DatabaseService } from '../src/database/database.service';
 import request from 'supertest';
+import type TestAgent from 'supertest/lib/agent';
+import { OIDC_PROVIDER, Provider } from '../../lib';
+import { AppAsyncFactoryModule } from '../src/app-async-factory.module';
+import { DatabaseService } from '../src/database/database.service';
 
 describe('[E2E] OidcModule - async configuration (useFactory)', () => {
   let app: INestApplication;
   let server: Server;
   let address: AddressInfo;
   let baseURL: string;
-  let agent: request.SuperAgentTest;
+  let agent: TestAgent;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -29,23 +30,21 @@ describe('[E2E] OidcModule - async configuration (useFactory)', () => {
     baseURL = `http://127.0.0.1:${address.port}`;
   });
 
-  it('should return discovery metadata in .well-known endpoint', done => {
+  it('should return discovery metadata in .well-known endpoint', async () => {
     const authEndpoint = `${baseURL}/oidc/auth`;
 
-    agent
+    const { body } = await agent
       .get('/oidc/.well-known/openid-configuration')
-      .expect(HttpStatus.OK)
-      .end((_err, { body }) => {
-        expect(body?.issuer).toEqual('http://localhost:3001');
-        expect(body?.authorization_endpoint).toEqual(authEndpoint);
-        expect(body?.grant_types_supported).toEqual(['authorization_code']);
-        expect(body?.response_types_supported).toEqual(['code']);
-        done();
-      });
+      .expect(HttpStatus.OK);
+
+    expect(body?.issuer).toEqual('http://localhost:3001');
+    expect(body?.authorization_endpoint).toEqual(authEndpoint);
+    expect(body?.grant_types_supported).toEqual(['authorization_code']);
+    expect(body?.response_types_supported).toEqual(['code']);
   });
 
   it('should save a grant through the adapter', async () => {
-    const provider = app.get(Provider);
+    const provider = app.get<Provider>(OIDC_PROVIDER);
     const dbService = app.get(DatabaseService, { strict: false });
 
     const grant = new provider.Grant({

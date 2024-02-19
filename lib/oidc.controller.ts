@@ -3,20 +3,21 @@ import {
   Controller,
   Req,
   Res,
-  VersioningType,
   VERSION_NEUTRAL,
+  VersioningType,
 } from '@nestjs/common';
+import { PATH_METADATA, VERSION_METADATA } from '@nestjs/common/constants';
 import { ModuleRef } from '@nestjs/core';
 import { Request, Response } from 'express';
-import { Provider } from 'oidc-provider';
-import { PATH_METADATA, VERSION_METADATA } from '@nestjs/common/constants';
+import { InjectOidcProvider } from './common/oidc-injection.decorators';
+import { Provider } from './types/oidc.types';
 
 @Controller()
 export class OidcController {
   private callback: (req: Request, res: Response) => void;
 
   constructor(
-    readonly provider: Provider,
+    @InjectOidcProvider() readonly provider: Provider,
     private readonly moduleRef: ModuleRef,
   ) {
     this.callback = provider.callback();

@@ -1,13 +1,14 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppAsyncClassModule } from '../src/app-async-class.module';
 import { Server } from 'http';
 import request from 'supertest';
+import type TestAgent from 'supertest/lib/agent';
+import { AppAsyncClassModule } from '../src/app-async-class.module';
 
 describe('[E2E] OidcModule - authorization code flow', () => {
   let app: INestApplication;
   let server: Server;
-  let agent: request.SuperAgentTest;
+  let agent: TestAgent;
   let interactionURL: string;
 
   beforeAll(async () => {
@@ -22,23 +23,18 @@ describe('[E2E] OidcModule - authorization code flow', () => {
     await app.listen(0);
   });
 
-  it('should return SessionNotFound error', done => {
-    agent
+  it('should return SessionNotFound error', async () => {
+    const { body } = await agent
       .get('/login/test')
-      .expect(HttpStatus.BAD_REQUEST)
-      .end((err, { body }) => {
-        if (err) {
-          return done(err);
-        }
-        expect(body?.status).toEqual(400);
-        expect(body?.name).toEqual('SessionNotFound');
-        expect(body?.error).toEqual('invalid_request');
-        done();
-      });
+      .expect(HttpStatus.BAD_REQUEST);
+
+    expect(body?.status).toEqual(400);
+    expect(body?.name).toEqual('SessionNotFound');
+    expect(body?.error).toEqual('invalid_request');
   });
 
-  it('should create an interaction session', done => {
-    agent
+  it('should create an interaction session', async () => {
+    const res = await agent
       .get('/oidc/auth')
       .query({
         response_type: 'code',
@@ -46,128 +42,85 @@ describe('[E2E] OidcModule - authorization code flow', () => {
         scope: 'openid',
         redirect_uri: 'http://localhost:8080',
       })
-      .expect(HttpStatus.SEE_OTHER)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
+      .expect(HttpStatus.SEE_OTHER);
 
-        interactionURL = res.headers['location'] ?? ('' as string);
+    interactionURL = res.headers['location'] ?? ('' as string);
 
-        expect(res.headers['set-cookie']).toBeTruthy();
-        expect(interactionURL).toMatch(/^\/login\/[^\/]+/);
-        done();
-      });
+    expect(res.headers['set-cookie']).toBeTruthy();
+    expect(interactionURL).toMatch(/^\/login\/[^\/]+/);
   });
 
-  it('should have a valid interaction session', done => {
-    agent
+  it('should have a valid interaction session', async () => {
+    const { body } = await agent
       .get(interactionURL)
-      .expect(HttpStatus.OK)
-      .end((err, { body }) => {
-        if (err) {
-          return done(err);
-        }
-        expect(body?.kind).toEqual('Interaction');
-        expect(body?.prompt?.name).toEqual('login');
-        expect(body?.params?.client_id).toEqual('test');
-        done();
-      });
+      .expect(HttpStatus.OK);
+
+    expect(body?.kind).toEqual('Interaction');
+    expect(body?.prompt?.name).toEqual('login');
+    expect(body?.params?.client_id).toEqual('test');
   });
 
-  it('should authenticate', done => {
-    agent
+  it('should authenticate', async () => {
+    const res = await agent
       .post(interactionURL)
       .send({ user: 'test', pwd: 'testpwd' })
-      .expect(HttpStatus.SEE_OTHER)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        const location = res.headers['location'];
+      .expect(HttpStatus.SEE_OTHER);
 
-        expect(location).toMatch(/\/oidc\/auth\/[^\/]+$/);
+    const location = res.headers['location'];
 
-        interactionURL = new URL(location).pathname;
+    expect(location).toMatch(/\/oidc\/auth\/[^\/]+$/);
 
-        done();
-      });
+    interactionURL = new URL(location).pathname;
   });
 
-  it('should redirect to the consent endpoint', done => {
-    agent
+  it('should redirect to the consent endpoint', async () => {
+    const res = await agent
       .get(interactionURL)
-      .expect(HttpStatus.SEE_OTHER)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        const location = res.headers['location'];
+      .expect(HttpStatus.SEE_OTHER);
 
-        expect(location).toMatch(/^\/consent\/[^\/]+/);
+    const location = res.headers['location'];
 
-        interactionURL = location;
-        done();
-      });
+    expect(location).toMatch(/^\/consent\/[^\/]+/);
+
+    interactionURL = location;
   });
 
-  it('should have a login session', done => {
-    agent
+  it('should have a login session', async () => {
+    const { body } = await agent
       .get(interactionURL)
-      .expect(HttpStatus.OK)
-      .end((err, { body }) => {
-        if (err) {
-          return done(err);
-        }
-        expect(body?.session?.accountId).toEqual('test');
-        done();
-      });
+      .expect(HttpStatus.OK);
+
+    expect(body?.session?.accountId).toEqual('test');
   });
 
-  it('should confirm consent', done => {
-    agent
+  it('should confirm consent', async () => {
+    const res = await agent
       .post(`${interactionURL}/confirm`)
-      .expect(HttpStatus.SEE_OTHER)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        const location = res.headers['location'];
+      .expect(HttpStatus.SEE_OTHER);
 
-        expect(location).toMatch(/\/oidc\/auth\/[^\/]+$/);
+    const location = res.headers['location'];
 
-        interactionURL = new URL(location).pathname;
+    expect(location).toMatch(/\/oidc\/auth\/[^\/]+$/);
 
-        done();
-      });
+    interactionURL = new URL(location).pathname;
   });
 
-  it('should redirect to redirect_uri endpoint', done => {
-    agent
+  it('should redirect to redirect_uri endpoint', async () => {
+    const res = await agent
       .get(interactionURL)
-      .expect(HttpStatus.SEE_OTHER)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        const location = res.headers['location'];
-        expect(location).toMatch(/\?code=[^\/]+/);
-        done();
-      });
+      .expect(HttpStatus.SEE_OTHER);
+
+    const location = res.headers['location'];
+    expect(location).toMatch(/\?code=[^\/]+/);
   });
 
-  it('should return session info in "/me" route', done => {
-    agent
+  it('should return session info in "/me" route', async () => {
+    const { body } = await agent
       .get('/me')
-      .expect(HttpStatus.OK)
-      .end((err, { body }) => {
-        if (err) {
-          return done(err);
-        }
-        expect(body?.uid).toBeTruthy();
-        expect(body?.accountId).toEqual('test');
-        done();
-      });
+      .expect(HttpStatus.OK);
+
+    expect(body?.uid).toBeTruthy();
+    expect(body?.accountId).toEqual('test');
   });
 
   afterAll(async () => {

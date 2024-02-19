@@ -2,11 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "rootDir": "../",
-    "strictNullChecks": true
   },
   "include": [
     "**/*.e2e-spec.ts",
-    "**/*.spec.ts"
   ],
   "exclude": [
     "node_modules",

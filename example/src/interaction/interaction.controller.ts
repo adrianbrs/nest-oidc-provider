@@ -7,8 +7,12 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { Provider } from 'oidc-provider';
-import { Oidc, InteractionHelper } from 'nest-oidc-provider';
+import {
+  InjectOidcProvider,
+  InteractionHelper,
+  OidcInteraction,
+  Provider,
+} from 'nest-oidc-provider';
 import { Response } from 'express';
 
 /**
@@ -18,11 +22,11 @@ import { Response } from 'express';
 export class InteractionController {
   private readonly logger = new Logger(InteractionController.name);
 
-  constructor(private readonly provider: Provider) {}
+  constructor(@InjectOidcProvider() private readonly provider: Provider) {}
 
   @Get(':uid')
   async login(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Res() res: Response,
   ) {
     const { prompt, params, uid } = await interaction.details();
@@ -39,7 +43,7 @@ export class InteractionController {
 
   @Post(':uid')
   async loginCheck(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Body() form: Record<string, string>,
   ) {
     const { prompt, params, uid } = await interaction.details();
@@ -67,7 +71,7 @@ export class InteractionController {
   }
 
   @Post(':uid/confirm')
-  async confirmLogin(@Oidc.Interaction() interaction: InteractionHelper) {
+  async confirmLogin(@OidcInteraction() interaction: InteractionHelper) {
     const interactionDetails = await interaction.details();
     const { prompt, params, session } = interactionDetails;
     let { grantId } = interactionDetails;
@@ -109,7 +113,7 @@ export class InteractionController {
   }
 
   @Get(':uid/abort')
-  async abortLogin(@Oidc.Interaction() interaction: InteractionHelper) {
+  async abortLogin(@OidcInteraction() interaction: InteractionHelper) {
     const result = {
       error: 'access_denied',
       error_description: 'End-user aborted interaction',

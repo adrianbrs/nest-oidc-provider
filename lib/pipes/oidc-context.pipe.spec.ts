@@ -1,28 +1,11 @@
+import { createMock } from '@golevelup/ts-jest';
 import { ExecutionContext, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { IncomingMessage, ServerResponse } from 'http';
+import { Provider } from 'lib/types/oidc.types';
 import { OidcModule } from '../oidc.module';
-import { Provider } from 'oidc-provider';
 import { OidcService } from '../oidc.service';
 import { OidcContextPipe } from './oidc-context.pipe';
-import { createMock } from '@golevelup/ts-jest';
-import { IncomingMessage, ServerResponse } from 'http';
-
-jest.mock('oidc-provider', () => ({
-  Provider: jest.fn<Partial<Provider>, ConstructorParameters<typeof Provider>>(
-    issuer => ({
-      issuer,
-      callback: jest.fn(() => jest.fn()),
-      OIDCContext: jest.fn<any, any[]>(() => ({
-        session: {
-          accountId: 'test',
-        },
-      })),
-      app: {
-        createContext: jest.fn<any, any[]>(() => ({})),
-      } as any,
-    }),
-  ),
-}));
 
 describe('OidcContextPipe', () => {
   let app: INestApplication;
@@ -45,6 +28,19 @@ describe('OidcContextPipe', () => {
       imports: [
         OidcModule.forRoot({
           issuer: '',
+          factory: ({ issuer }) =>
+            ({
+              issuer,
+              callback: jest.fn(() => jest.fn()),
+              OIDCContext: jest.fn<any, any[]>(() => ({
+                session: {
+                  accountId: 'test',
+                },
+              })),
+              app: {
+                createContext: jest.fn<any, any[]>(() => ({})),
+              } as any,
+            }) as unknown as Provider,
         }),
       ],
     }).compile();

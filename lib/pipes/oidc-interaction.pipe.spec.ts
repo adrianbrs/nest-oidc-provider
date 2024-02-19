@@ -1,30 +1,11 @@
+import { createMock } from '@golevelup/ts-jest';
 import { ExecutionContext, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { OIDC_PROVIDER } from '../oidc.constants';
 import { OidcModule } from '../oidc.module';
-import { KoaContextWithOIDC, Provider } from 'oidc-provider';
 import { OidcService } from '../oidc.service';
-import { createMock } from '@golevelup/ts-jest';
+import { KoaContextWithOIDC, Provider } from '../types/oidc.types';
 import { OidcInteractionHelperPipe } from './oidc-interaction.pipe';
-
-jest.mock('oidc-provider', () => ({
-  Provider: jest.fn<Partial<Provider>, ConstructorParameters<typeof Provider>>(
-    issuer => ({
-      issuer,
-      callback: jest.fn(() => jest.fn()),
-      OIDCContext: jest.fn<any, any[]>(() => ({
-        session: {
-          accountId: 'test',
-        },
-      })),
-      app: {
-        createContext: jest.fn<any, any[]>(() => ({})),
-      } as any,
-      interactionDetails: jest.fn(),
-      interactionFinished: jest.fn(),
-      interactionResult: jest.fn(),
-    }),
-  ),
-}));
 
 describe('OidcInteractionPipe', () => {
   let app: INestApplication;
@@ -53,13 +34,29 @@ describe('OidcInteractionPipe', () => {
       imports: [
         OidcModule.forRoot({
           issuer: '',
+          factory: ({ issuer }) =>
+            ({
+              issuer,
+              callback: jest.fn(() => jest.fn()),
+              OIDCContext: jest.fn<any, any[]>(() => ({
+                session: {
+                  accountId: 'test',
+                },
+              })),
+              app: {
+                createContext: jest.fn<any, any[]>(() => ({})),
+              } as any,
+              interactionDetails: jest.fn(),
+              interactionFinished: jest.fn(),
+              interactionResult: jest.fn(),
+            }) as unknown as Provider,
         }),
       ],
     }).compile();
 
     app = moduleRef.createNestApplication();
     oidcService = app.get(OidcService);
-    provider = app.get(Provider);
+    provider = app.get(OIDC_PROVIDER);
 
     fakeOidcCtx = {
       oidc: {

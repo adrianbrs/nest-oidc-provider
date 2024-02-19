@@ -22,7 +22,23 @@ OR
 $ yarn add nest-oidc-provider oidc-provider
 ```
 
+OR
+
+```bash
+$ pnpm add nest-oidc-provider oidc-provider
+```
+
 ## Setup
+
+> ⚠️ Version 8 of `oidc-provider` [became ESM-only](<https://github.com/panva/node-oidc-provider/releases/tag/v8.0.0#:~:text=tokens%20(cb67083)-,oidc%2Dprovider%20is%20now%20an%20ESM%2Donly%20module,-(3c5ebe1)>), which is not yet supported by NestJS directly ([nest#7021](https://github.com/nestjs/nest/issues/7021), [nest#8736](https://github.com/nestjs/nest/pull/8736)). This library allows the use of ESM-only versions of `oidc-provider` using a dynamic import, therefore, all interfaces must be imported from this package to avoid errors such as `[ERR_REQUIRE_ESM]`, and access to the module must be done through dependency injection, using the decorator `@InjectOidcModule()` to inject the module imported from `oidc-provider` and `@InjectOidcProvider()` to inject the running instance. You should not import anything from the `oidc-provider` package directly!
+
+### TypeScript
+
+You need to install the `oidc-provider` @types package if you want to use the re-exported types from this library
+
+```bash
+npm install @types/oidc-provider --save-dev
+```
 
 ### Basic configuration
 
@@ -49,8 +65,9 @@ You can pass a `factory` function to customize the provider instantiation.
     OidcModule.forRoot({
       issuer: 'http://localhost:3000',
       path: '/oidc',
-      factory: (issuer, config) => {
-        const provider = new oidc.Provider(issuer, config);
+      factory: ({ issuer, config, module }) => {
+        // `module` is the import from `oidc-provider`
+        const provider = new module.Provider(issuer, config);
         provider.on('server_error', (ctx, err) => {...})
         return provider;
       },
@@ -117,6 +134,8 @@ export class AppModule {}
 Note that in this example, the `OidcConfigService` has to implement the `OidcModuleOptionsFactory` interface, as shown below.
 
 ```ts
+import type { OidcModuleOptionsFactory } from 'nest-oidc-provider';
+
 @Injectable()
 export class OidcConfigService implements OidcModuleOptionsFactory {
   constructor(private readonly @InjectConnection() conn: Connection) {}
@@ -151,17 +170,63 @@ You can omit the `Adapter` option of oidc-provider configuration if you implemen
 export class AppModule {}
 ```
 
+## Custom injection decorators
+
+To be able to access the exports of the `oidc-provider` module or the running instance, you need to use decorators or injection tokens:
+
+```ts
+import {
+  InjectOidcModule,
+  InjectOidcProvider,
+  type Provider,
+  type ProviderModule,
+} from 'nest-oidc-provider';
+
+@Controller('/some-controller')
+export class SomeController {
+  constructor(
+    /** Returns exports from the `oidc-provider` module */
+    @InjectOidcModule() oidc: ProviderModule,
+    /** Returns the running `oidc-provider` instance */
+    @InjectOidcProvider() provider: Provider,
+  ) {}
+}
+```
+
+OR
+
+```ts
+import {
+  OIDC_PROVIDER,
+  OIDC_PROVIDER_MODULE,
+  type Provider,
+  type ProviderModule,
+} from 'nest-oidc-provider';
+
+async function bootstrap() {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  const { Provider, errors, interactionPolicy } =
+    app.get<ProviderModule>(OIDC_PROVIDER_MODULE);
+  const provider = app.get<Provider>(OIDC_PROVIDER);
+
+  await app.listen(3000);
+}
+```
+
 ## Custom param decorators
 
-### `@Oidc.Interaction()`
+### `@OidcInteraction()`
 
 Returns an instance of `InteractionHelper` class.
 
 ```ts
+import { OidcInteraction, type InteractionHelper } from 'nest-oidc-provider';
+
 @Get(':uid')
 @Render('login')
 async login(
-  @Oidc.Interaction() interaction: InteractionHelper
+  @OidcInteraction() interaction: InteractionHelper
 ) {
   const { prompt, params, uid } = await interaction.details();
 
@@ -189,13 +254,15 @@ interface InteractionHelper {
 }
 ```
 
-### `@Oidc.Context()`
+### `@OidcContext()`
 
 Returns an instance of `KoaContextWithOIDC`.
 
 ```ts
+import { OidcContext, type KoaContextWithOIDC } from 'nest-oidc-provider';
+
 @Get()
-async index(@Oidc.Context() ctx: KoaContextWithOIDC) {
+async index(@OidcContext() ctx: KoaContextWithOIDC) {
   const { oidc: { provider } } = ctx;
   const session = await provider.Session.get(ctx);
   //...

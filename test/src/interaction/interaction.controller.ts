@@ -11,13 +11,8 @@ import {
   Res,
   UseFilters,
 } from '@nestjs/common';
-import { InteractionHelper, OidcService, Oidc } from '../../../lib';
 import { Request, Response } from 'express';
-import {
-  InteractionResults,
-  KoaContextWithOIDC,
-  Provider,
-} from 'oidc-provider';
+import { InjectOidcProvider, InteractionHelper, InteractionResults, KoaContextWithOIDC, OidcContext, OidcInteraction, OidcService, Provider } from '../../../lib';
 
 @Catch()
 class InteractionFilter implements ExceptionFilter {
@@ -36,7 +31,7 @@ interface LoginForm {
 @Controller()
 export class InteractionController {
   constructor(
-    private readonly provider: Provider,
+    @InjectOidcProvider() private readonly provider: Provider,
     private readonly oidcService: OidcService,
   ) {}
 
@@ -53,7 +48,7 @@ export class InteractionController {
   async loginGet(
     @Req() req: Request,
     @Res() res: Response,
-    @Oidc.Context() ctx: KoaContextWithOIDC,
+    @OidcContext() ctx: KoaContextWithOIDC,
   ): Promise<any> {
     const details = await ctx.oidc.provider.interactionDetails(req, res);
     res.status(HttpStatus.OK).send(details);
@@ -61,7 +56,7 @@ export class InteractionController {
 
   @Post('/login/:uid')
   async loginPost(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Body() loginForm: LoginForm,
   ): Promise<any> {
     await interaction.details();
@@ -81,7 +76,7 @@ export class InteractionController {
 
   @Get('/consent/:uid')
   async consentGet(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Res() res: Response,
   ): Promise<any> {
     const details = await interaction.details();
@@ -90,7 +85,7 @@ export class InteractionController {
 
   @Post('/consent/:uid/confirm')
   async consentConfirm(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Res() res: Response,
   ) {
     const { prompt, params, session } = await interaction.details();

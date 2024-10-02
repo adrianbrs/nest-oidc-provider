@@ -1,3 +1,31 @@
+
+
+# [2.0.0](https://github.com/adrianbrs/nest-oidc-provider/compare/1.1.1...2.0.0) (2024-10-02)
+
+
+### Bug Fixes
+
+* add oidc-provider as a peer dependency ([a3b1749](https://github.com/adrianbrs/nest-oidc-provider/commit/a3b1749f602c941efcf68f75f4052284b39f4ef9))
+* export only public constants ([d936a8e](https://github.com/adrianbrs/nest-oidc-provider/commit/d936a8ead26f03ca74d239df7a494c57a03f71c2))
+* remove duplicated oidc types ([90ac2a7](https://github.com/adrianbrs/nest-oidc-provider/commit/90ac2a713bca98831485f68305ffb5cd547afa25))
+* use `eval` to skip dynamic import transpilation ([0862584](https://github.com/adrianbrs/nest-oidc-provider/commit/08625844c6f7fc6bf3aebab42c5f55325261d9e7))
+
+
+### Build System
+
+* **deps:** upgrade `oidc-provider` to version `8.5.1` ([4532f12](https://github.com/adrianbrs/nest-oidc-provider/commit/4532f12983212d9e434b66c34c0ee2f6f06209f8))
+
+
+### Features
+
+* add new `OidcSession` decorator ([7a70e89](https://github.com/adrianbrs/nest-oidc-provider/commit/7a70e898a95fa49389b5e7d5f660ad1fd73da210))
+* add support for `oidc-provider@8` ([b40ca5a](https://github.com/adrianbrs/nest-oidc-provider/commit/b40ca5aee31a556deb33e3eedb19f3c80620237c))
+
+
+### BREAKING CHANGES
+
+* **deps:** The `InteractionDetails` type has been renamed to `Interaction` and is now exported directly from `oidc-provider`.
+
 # [1.1.0](https://github.com/adrianbrs/nest-oidc-provider/compare/1.0.7...1.1.0) (2022-09-22)
 
 
@@ -43,6 +71,3 @@
 ### Features
 
 * create first lib version ([0420c27](https://github.com/adrianbrs/nest-oidc-provider/commit/0420c2799239fc38c7fe3ec64fcb9a3b08dcf444))
-
-
-

@@ -1,5 +1,5 @@
 import {
-  InteractionDetails,
+  Interaction,
   InteractionResults,
   KoaContextWithOIDC,
   Provider,
@@ -13,7 +13,7 @@ export class InteractionHelper {
     this.provider = oidc.provider;
   }
 
-  details(): Promise<InteractionDetails> {
+  details(): Promise<Interaction> {
     return this.provider.interactionDetails(this.ctx.req, this.ctx.res);
   }
 

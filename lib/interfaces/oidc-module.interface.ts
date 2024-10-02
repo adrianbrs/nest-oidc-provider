@@ -3,8 +3,8 @@ import { VersionValue } from '@nestjs/common/interfaces';
 import {
   AdapterFactory,
   Configuration,
+  OidcProviderModule,
   Provider,
-  ProviderModule,
 } from '../types/oidc.types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -13,7 +13,7 @@ export interface OidcConfiguration extends Configuration {}
 export interface OidcModuleFactoryArgs {
   issuer: string;
   config?: Configuration;
-  module: ProviderModule;
+  module: OidcProviderModule;
 }
 
 export type OidcModuleFactoryFn = (

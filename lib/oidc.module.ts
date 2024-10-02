@@ -21,7 +21,7 @@ import {
 } from './oidc.constants';
 import { OidcController } from './oidc.controller';
 import { OidcService } from './oidc.service';
-import { ProviderModule } from './types/oidc.types';
+import { OidcProviderModule } from './types/oidc.types';
 
 @Global()
 @Module({
@@ -64,17 +64,14 @@ export class OidcModule {
     // FIXME: This is a workaround for the current limitation of Nest that doesn't support ESM-only packages
     const moduleProvider: Provider = {
       provide: OIDC_PROVIDER_MODULE,
-      useFactory: async (): Promise<ProviderModule> =>
-        importOidcProvider().then(({ default: Provider, ...module }) => ({
-          Provider,
-          ...module,
-        })),
+      useFactory: async (): Promise<OidcProviderModule> =>
+        importOidcProvider(),
     };
 
     const oidcProvider: Provider = {
       provide: OIDC_PROVIDER,
       useFactory: async (
-        providerModule: ProviderModule,
+        providerModule: OidcProviderModule,
         moduleOptions: OidcModuleOptions,
       ): Promise<any> => {
         // Change controller path manually until Nest doesn't provide an official way for this

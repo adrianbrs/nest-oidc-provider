@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { OIDC_PROVIDER, Provider, ProviderModule } from '../../lib';
+import { OIDC_PROVIDER, OidcProviderModule, Provider } from '../../lib';
 import { AppModule } from '../src/app.module';
 
 const CUSTOM_TAG = Symbol('CustomProvider');
@@ -9,7 +9,7 @@ interface CustomProvider extends Provider {
   [CUSTOM_TAG]: true;
 }
 
-function getCustomProviderClass(module: ProviderModule) {
+function getCustomProviderClass(module: OidcProviderModule) {
   class CustomProvider extends module.Provider implements CustomProvider {
     [CUSTOM_TAG] = true;
   };

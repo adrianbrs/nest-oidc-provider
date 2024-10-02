@@ -54,7 +54,7 @@
     "@types/jest": "^29.5.12",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^20.11.19",
-    "@types/oidc-provider": "^8.4.4",
+    "@types/oidc-provider": "^8.5.2",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
@@ -67,7 +67,7 @@
     "jest-mock": "^29.7.0",
     "lint-staged": "^15.2.2",
     "lodash.merge": "^4.6.2",
-    "oidc-provider": "^8.4.5",
+    "oidc-provider": "^8.5.1",
     "prettier": "^3.2.5",
     "prettier-eslint-cli": "^8.0.1",
     "reflect-metadata": "^0.2.1",
@@ -81,7 +81,7 @@
   "peerDependencies": {
     "@nestjs/common": ">=9.0.0",
     "@nestjs/core": ">=9.0.0",
-    "oidc-provider": "^8.4.5",
+    "oidc-provider": "^8.5.1",
     "reflect-metadata": ">=0.1.13"
   },
   "engines": {

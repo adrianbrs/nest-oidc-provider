@@ -269,6 +269,19 @@ async index(@OidcContext() ctx: KoaContextWithOIDC) {
 }
 ```
 
+### `@OidcSession()`
+
+Returns the user `Session` from the current context, equivalent to retrieving the session from `KoaContextWithOIDC`.
+
+```ts
+import { OidcSession, type Session } from 'nest-oidc-provider';
+
+@Get()
+async index(@OidcSession() session: Session) {
+  //...
+}
+```
+
 ## Examples
 
 A complete example can be found in the [example](example) directory.

@@ -12,7 +12,17 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { InjectOidcProvider, InteractionHelper, InteractionResults, KoaContextWithOIDC, OidcContext, OidcInteraction, OidcService, Provider } from '../../../lib';
+import {
+  InjectOidcProvider,
+  InteractionHelper,
+  InteractionResults,
+  KoaContextWithOIDC,
+  OidcContext,
+  OidcInteraction,
+  OidcSession,
+  Provider,
+  Session,
+} from '../../../lib';
 
 @Catch()
 class InteractionFilter implements ExceptionFilter {
@@ -32,12 +42,10 @@ interface LoginForm {
 export class InteractionController {
   constructor(
     @InjectOidcProvider() private readonly provider: Provider,
-    private readonly oidcService: OidcService,
   ) {}
 
   @Get('/me')
-  async getMe(@Req() req: Request, @Res() res: Response) {
-    const session = await this.oidcService.getSession(req, res);
+  async getMe(@Res() res: Response, @OidcSession() session: Session) {
     res.status(HttpStatus.OK).send({
       uid: session.uid,
       accountId: session.accountId,

@@ -30,11 +30,11 @@ $ pnpm add nest-oidc-provider oidc-provider
 
 ## Setup
 
-> ⚠️ Version 8 of `oidc-provider` [became ESM-only](<https://github.com/panva/node-oidc-provider/releases/tag/v8.0.0#:~:text=tokens%20(cb67083)-,oidc%2Dprovider%20is%20now%20an%20ESM%2Donly%20module,-(3c5ebe1)>), which is not yet supported by NestJS directly ([nest#7021](https://github.com/nestjs/nest/issues/7021), [nest#8736](https://github.com/nestjs/nest/pull/8736)). This library allows the use of ESM-only versions of `oidc-provider` using a dynamic import, therefore, all interfaces must be imported from this package to avoid errors such as `[ERR_REQUIRE_ESM]`, and access to the module must be done through dependency injection, using the decorator `@InjectOidcModule()` to inject the module imported from `oidc-provider` and `@InjectOidcProvider()` to inject the running instance. You should not import anything from the `oidc-provider` package directly!
+> ⚠️ Version 8 of `oidc-provider` [is now ESM-only](<https://github.com/panva/node-oidc-provider/releases/tag/v8.0.0#:~:text=tokens%20(cb67083)-,oidc%2Dprovider%20is%20now%20an%20ESM%2Donly%20module,-(3c5ebe1)>), which is not yet supported by NestJS natively ([nest#7021](https://github.com/nestjs/nest/issues/7021), [nest#8736](https://github.com/nestjs/nest/pull/8736)). This library enables the use of the ESM-only version of `oidc-provider` for Node.js <= 20.17.x via dynamic imports. To avoid errors like [ERR_REQUIRE_ESM], all interfaces should be imported from this package, and the module should be accessed through dependency injection. Use `@InjectOidcModule()` to inject the `oidc-provider` module and `@InjectOidcProvider()` for the running instance. **You must not import anything directly from** `oidc-provider`, unless you're using Node.js >= 20.17.x with the experimental `--experimental-require-module` flag ([#54447](https://github.com/nodejs/node/pull/54447))!
 
 ### TypeScript
 
-You need to install the `oidc-provider` @types package if you want to use the re-exported types from this library
+You need to install the `oidc-provider` @types package if you want to use the re-exported types from this library.
 
 ```bash
 npm install @types/oidc-provider --save-dev

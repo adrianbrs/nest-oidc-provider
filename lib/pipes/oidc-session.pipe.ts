@@ -1,16 +1,16 @@
 import { ExecutionContext, Injectable, PipeTransform } from '@nestjs/common';
 import { getReqRes } from '../common/oidc.utils';
 import { OidcService } from '../oidc.service';
-import { KoaContextWithOIDC } from '../types/oidc.types';
+import { Session } from '../types/oidc.types';
 
 @Injectable()
-export class OidcContextPipe
-  implements PipeTransform<ExecutionContext, KoaContextWithOIDC>
+export class OidcSessionPipe
+  implements PipeTransform<ExecutionContext, Promise<Session>>
 {
   constructor(private readonly oidcService: OidcService) {}
 
-  transform(ctx: ExecutionContext) {
+  async transform(ctx: ExecutionContext) {
     const { req, res } = getReqRes(ctx);
-    return this.oidcService.getContext(req, res);
+    return this.oidcService.getSession(req, res);
   }
 }

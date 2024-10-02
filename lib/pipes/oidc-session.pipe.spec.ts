@@ -1,26 +1,24 @@
 import { createMock } from '@golevelup/ts-jest';
 import { ExecutionContext, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { OIDC_PROVIDER } from '../oidc.constants';
 import { OidcModule } from '../oidc.module';
 import { OidcService } from '../oidc.service';
-import { KoaContextWithOIDC, Provider } from '../types/oidc.types';
-import { OidcInteractionHelperPipe } from './oidc-interaction.pipe';
+import { Provider, Session } from '../types/oidc.types';
+import { OidcSessionPipe } from './oidc-session.pipe';
 
-describe('OidcInteractionPipe', () => {
+describe('OidcSessionPipe', () => {
   let app: INestApplication;
   let oidcService: OidcService;
   let executionCtx: ExecutionContext;
   let req: any;
   let res: any;
-  let fakeOidcCtx: KoaContextWithOIDC;
-  let provider: Provider;
+  let fakeSession: Session;
 
-  const mockGetContext = jest.spyOn(OidcService.prototype, 'getContext');
-  mockGetContext.mockImplementation(() => fakeOidcCtx);
+  const mockGetSession = jest.spyOn(OidcService.prototype, 'getSession');
+  mockGetSession.mockImplementation(async () => fakeSession);
 
   beforeEach(async () => {
-    mockGetContext.mockClear();
+    mockGetSession.mockClear();
     req = jest.fn();
     res = jest.fn();
     executionCtx = createMock<ExecutionContext>({
@@ -56,24 +54,17 @@ describe('OidcInteractionPipe', () => {
 
     app = moduleRef.createNestApplication();
     oidcService = app.get(OidcService);
-    provider = app.get(OIDC_PROVIDER);
 
-    fakeOidcCtx = {
-      oidc: {
-        provider: provider as any,
-      },
-      req,
-      res,
-    } as any;
+    fakeSession = jest.fn() as any;
 
     await app.init();
   });
 
-  it('should return a valid interaction helper', () => {
-    const pipe = new OidcInteractionHelperPipe(oidcService);
-    const helper = pipe.transform(executionCtx);
+  it('should return a valid session', async () => {
+    const pipe = new OidcSessionPipe(oidcService);
+    const session = await pipe.transform(executionCtx);
 
-    expect(mockGetContext).toHaveBeenCalledWith(req, res);
-    expect((helper as any)?.ctx).toEqual(fakeOidcCtx);
+    expect(mockGetSession).toHaveBeenCalledWith(req, res);
+    expect(session).toEqual(fakeSession);
   });
 });

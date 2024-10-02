@@ -13,10 +13,10 @@
     "sourceMap": true,
     "target": "es6",
     "outDir": "./dist",
-    "rootDir": "./lib",
+    "rootDir": ".",
     "baseUrl": ".",
     "skipLibCheck": true
   },
-  "include": ["lib/**/*"],
+  "include": ["lib/**/*", "jest.config.ts"],
   "exclude": ["node_modules", "tests"]
 }

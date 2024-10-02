@@ -8,8 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { Oidc } from 'nest-oidc-provider';
-import { KoaContextWithOIDC } from 'oidc-provider';
+import { KoaContextWithOIDC, OidcContext } from 'nest-oidc-provider';
 import axios from 'axios';
 import qs from 'query-string';
 
@@ -19,7 +18,7 @@ export class AppController {
 
   @Get('/')
   @Render('index')
-  async index(@Oidc.Context() ctx: KoaContextWithOIDC) {
+  async index(@OidcContext() ctx: KoaContextWithOIDC) {
     const {
       oidc: { provider },
     } = ctx;

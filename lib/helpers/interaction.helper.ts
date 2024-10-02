@@ -1,20 +1,24 @@
-import * as oidc from 'oidc-provider';
-import { InteractionDetails } from '../types/oidc.types';
+import {
+  Interaction,
+  InteractionResults,
+  KoaContextWithOIDC,
+  Provider,
+} from '../types/oidc.types';
 
 export class InteractionHelper {
-  private readonly provider: oidc.Provider;
+  private readonly provider: Provider;
 
-  constructor(private readonly ctx: oidc.KoaContextWithOIDC) {
+  constructor(private readonly ctx: KoaContextWithOIDC) {
     const { oidc } = ctx;
     this.provider = oidc.provider;
   }
 
-  details(): Promise<InteractionDetails> {
+  details(): Promise<Interaction> {
     return this.provider.interactionDetails(this.ctx.req, this.ctx.res);
   }
 
   finished(
-    result: oidc.InteractionResults,
+    result: InteractionResults,
     options?: { mergeWithLastSubmission?: boolean },
   ): Promise<void> {
     return this.provider.interactionFinished(
@@ -26,7 +30,7 @@ export class InteractionHelper {
   }
 
   result(
-    result: oidc.InteractionResults,
+    result: InteractionResults,
     options?: { mergeWithLastSubmission?: boolean },
   ): Promise<string> {
     return this.provider.interactionResult(

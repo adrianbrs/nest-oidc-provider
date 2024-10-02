@@ -1,21 +1,12 @@
-import * as oidc from 'oidc-provider';
+import type * as _OidcProvider from 'oidc-provider';
 
 //===================================//
-//  MISSING NON-EXPORTED OIDC TYPES  //
+//   RE-EXPORT ONLY TYPES TO AVOID   //
+//     IMPORTING ESM AT RUNTIME      //
 //===================================//
+export type * from 'oidc-provider';
 
-type SessionPromise = ReturnType<
-  typeof oidc.Provider.prototype['Session']['get']
->;
-export type Session = SessionPromise extends Promise<infer T>
-  ? T
-  : SessionPromise;
-
-type InteractionDetailsPromise = ReturnType<
-  typeof oidc.Provider.prototype['interactionDetails']
->;
-export type InteractionDetails = InteractionDetailsPromise extends Promise<
-  infer T
->
-  ? T
-  : InteractionDetailsPromise;
+/**
+ * Represents the `oidc-provider` module imported via dynamic import.
+ */
+export type OidcProviderModule = typeof _OidcProvider;

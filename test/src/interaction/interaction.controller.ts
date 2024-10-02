@@ -11,13 +11,18 @@ import {
   Res,
   UseFilters,
 } from '@nestjs/common';
-import { InteractionHelper, OidcService, Oidc } from '../../../lib';
 import { Request, Response } from 'express';
 import {
+  InjectOidcProvider,
+  InteractionHelper,
   InteractionResults,
   KoaContextWithOIDC,
+  OidcContext,
+  OidcInteraction,
+  OidcSession,
   Provider,
-} from 'oidc-provider';
+  Session,
+} from '../../../lib';
 
 @Catch()
 class InteractionFilter implements ExceptionFilter {
@@ -36,13 +41,11 @@ interface LoginForm {
 @Controller()
 export class InteractionController {
   constructor(
-    private readonly provider: Provider,
-    private readonly oidcService: OidcService,
+    @InjectOidcProvider() private readonly provider: Provider,
   ) {}
 
   @Get('/me')
-  async getMe(@Req() req: Request, @Res() res: Response) {
-    const session = await this.oidcService.getSession(req, res);
+  async getMe(@Res() res: Response, @OidcSession() session: Session) {
     res.status(HttpStatus.OK).send({
       uid: session.uid,
       accountId: session.accountId,
@@ -53,7 +56,7 @@ export class InteractionController {
   async loginGet(
     @Req() req: Request,
     @Res() res: Response,
-    @Oidc.Context() ctx: KoaContextWithOIDC,
+    @OidcContext() ctx: KoaContextWithOIDC,
   ): Promise<any> {
     const details = await ctx.oidc.provider.interactionDetails(req, res);
     res.status(HttpStatus.OK).send(details);
@@ -61,7 +64,7 @@ export class InteractionController {
 
   @Post('/login/:uid')
   async loginPost(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Body() loginForm: LoginForm,
   ): Promise<any> {
     await interaction.details();
@@ -81,7 +84,7 @@ export class InteractionController {
 
   @Get('/consent/:uid')
   async consentGet(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Res() res: Response,
   ): Promise<any> {
     const details = await interaction.details();
@@ -90,7 +93,7 @@ export class InteractionController {
 
   @Post('/consent/:uid/confirm')
   async consentConfirm(
-    @Oidc.Interaction() interaction: InteractionHelper,
+    @OidcInteraction() interaction: InteractionHelper,
     @Res() res: Response,
   ) {
     const { prompt, params, session } = await interaction.details();

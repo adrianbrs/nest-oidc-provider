@@ -2,24 +2,15 @@ import {
   Controller,
   ControllerOptions,
   INestApplication,
+  VERSION_NEUTRAL,
   VersioningOptions,
   VersioningType,
-  VERSION_NEUTRAL,
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { OidcController } from './oidc.controller';
-import { Provider } from 'oidc-provider';
 import { Request, Response } from 'express';
+import { OidcController } from './oidc.controller';
 import { OidcModule } from './oidc.module';
-
-jest.mock('oidc-provider', () => ({
-  Provider: jest.fn<Partial<Provider>, ConstructorParameters<typeof Provider>>(
-    issuer => ({
-      issuer,
-      callback: jest.fn(() => jest.fn()),
-    }),
-  ),
-}));
+import { Provider } from './types/oidc.types';
 
 const TEST_PATH = '/test';
 
@@ -59,6 +50,11 @@ describe('OidcController', () => {
           issuer: '',
           path: controllerOptions.path as string,
           version: controllerOptions.version,
+          factory: ({ issuer }) =>
+            ({
+              issuer,
+              callback: jest.fn(() => jest.fn()),
+            }) as unknown as Provider,
         }),
       ],
     }).compile();

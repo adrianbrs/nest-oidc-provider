@@ -69,7 +69,7 @@
     "jest-mock": "^29.7.0",
     "lint-staged": "^15.2.2",
     "lodash.merge": "^4.6.2",
-    "oidc-provider": "^8.5.1",
+    "oidc-provider": "^8.8.1",
     "prettier": "^3.2.5",
     "prettier-eslint-cli": "^8.0.1",
     "reflect-metadata": "^0.2.1",
@@ -83,7 +83,7 @@
   "peerDependencies": {
     "@nestjs/common": ">=9.0.0",
     "@nestjs/core": ">=9.0.0",
-    "oidc-provider": "^8.5.1",
+    "oidc-provider": ">=8.5.1",
     "reflect-metadata": ">=0.1.13"
   },
   "engines": {

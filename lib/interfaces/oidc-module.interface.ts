@@ -1,6 +1,6 @@
-import { ModuleMetadata, Type } from '@nestjs/common';
-import { VersionValue } from '@nestjs/common/interfaces';
-import {
+import type { ControllerOptions, ModuleMetadata, Type } from '@nestjs/common';
+import type { VersionValue } from '@nestjs/common/interfaces';
+import type {
   AdapterFactory,
   Configuration,
   OidcProviderModule,
@@ -22,6 +22,7 @@ export type OidcModuleFactoryFn = (
 
 export interface OidcModuleOptions {
   path?: string;
+  host?: ControllerOptions['host'];
   version?: VersionValue;
   issuer: string;
   oidc?: OidcConfiguration;

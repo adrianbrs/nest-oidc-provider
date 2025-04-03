@@ -1,5 +1,12 @@
 
 
+# [2.1.0](https://github.com/adrianbrs/nest-oidc-provider/compare/2.0.0...2.1.0) (2025-04-03)
+
+
+### Features
+
+* add host configuration option ([af2f1a1](https://github.com/adrianbrs/nest-oidc-provider/commit/af2f1a185f1248d15cace3f6402473f7a7c8a16c)), closes [#28](https://github.com/adrianbrs/nest-oidc-provider/issues/28)
+
 # [2.0.0](https://github.com/adrianbrs/nest-oidc-provider/compare/1.1.1...2.0.0) (2024-10-02)
 
 

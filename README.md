@@ -89,7 +89,27 @@ For more info visit the `oidc-provider` documentation: [Trusting TLS offloading 
     OidcModule.forRoot({
       issuer: 'http://localhost:3000',
       path: '/oidc',
-      proxy: true, // <= trust TLS offloading proxies
+      proxy: true, // <- trust TLS offloading proxies
+      oidc: {...}
+    })
+  ],
+})
+export class AppModule {}
+```
+
+### Dynamic host routing
+
+You can set the `host` option to require the HTTP host of incoming requests to match some specific value before they are processed by the [`oidc-provider`](https://github.com/panva/node-oidc-provider/blob/main/docs/README.md#basic-configuration-example) callback.
+
+For more info visit the NestJS documentation: [Sub-domain routing](https://docs.nestjs.com/controllers#sub-domain-routing).
+
+```ts
+@Module({
+  imports: [
+    OidcModule.forRoot({
+      issuer: 'https://oidc.example.com',
+      path: '/oidc',
+      host: 'oidc.example.com', // <- Use a specific host/subdomain
       oidc: {...}
     })
   ],

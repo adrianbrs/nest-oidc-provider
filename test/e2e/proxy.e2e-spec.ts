@@ -2,15 +2,12 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Server } from 'http';
 import { OidcModuleFactoryFn } from 'lib';
-import { AddressInfo } from 'net';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 
 describe('[E2E] OidcModule - proxy', () => {
   let app: INestApplication;
   let server: Server;
-  let address: AddressInfo;
-  let baseURL: string;
 
   const PROXY_FOR = '123.456.789.0';
   const PROXY_HOST = 'test.example.com';
@@ -42,9 +39,6 @@ describe('[E2E] OidcModule - proxy', () => {
       server = app.getHttpServer();
 
       await app.listen(0);
-
-      address = server.address()! as AddressInfo;
-      baseURL = `http://127.0.0.1:${address.port}`;
     });
 
     afterEach(async () => {
@@ -84,9 +78,6 @@ describe('[E2E] OidcModule - proxy', () => {
       server = app.getHttpServer();
 
       await app.listen(0);
-
-      address = server.address()! as AddressInfo;
-      baseURL = `http://127.0.0.1:${address.port}`;
     });
 
     afterEach(async () => {

@@ -78,6 +78,7 @@ export class OidcModule {
         // (see https://github.com/nestjs/nest/issues/1438)
         Controller({
           path: validatePath(moduleOptions.path),
+          host: moduleOptions.host,
           version: moduleOptions.version,
         })(OidcController);
 

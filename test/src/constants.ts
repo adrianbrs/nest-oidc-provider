@@ -1,7 +1,7 @@
+import merge from 'lodash.merge';
 import { OidcModuleOptions } from '../../lib';
 import { TestAdapter } from './adapters/test.adapter';
 import { DatabaseService } from './database/database.service';
-import merge from 'lodash.merge';
 
 export const OPTIONS_TOKEN = 'OidcTestOptions';
 export const ISSUER = 'http://localhost:3001';
@@ -40,7 +40,6 @@ export const BASE_OPTIONS: OidcModuleOptions = {
     },
     responseTypes: ['code'],
     pkce: {
-      methods: ['S256'],
       required: () => false,
     },
     scopes: ['openid', 'email', 'profile', 'address', 'phone', 'account'],

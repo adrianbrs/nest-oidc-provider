@@ -19,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.19.1, 20.11.1, 'lts/*']
+        node-version: [18.20.8, 20.19.5, 22.20.0]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -34,6 +34,11 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      # oidc-provider@9 requires Node.js 22 or later
+      # We install oidc-provider@8 for Node.js versions < 22 to ensure compatibility
+      - name: Install oidc-provider@8
+        if: ${{ !startsWith(matrix.node-version, '22') }}
+        run: pnpm add -D oidc-provider@8
       - name: Build
         run: pnpm build
       - name: Test

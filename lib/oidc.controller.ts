@@ -53,7 +53,7 @@ export class OidcController {
     return `/${resultUrl}`.replace(/^\/+/, '/');
   }
 
-  @All('/*')
+  @All('/{*path}')
   public mountedOidc(@Req() req: Request, @Res() res: Response): void {
     req.url = this.getUrl(req.originalUrl);
     return this.callback(req, res);

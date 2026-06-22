@@ -81,8 +81,8 @@
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@nestjs/common": ">=9.0.0",
-    "@nestjs/core": ">=9.0.0",
+    "@nestjs/common": ">=11.0.0",
+    "@nestjs/core": ">=11.0.0",
     "oidc-provider": ">=8.5.1",
     "reflect-metadata": ">=0.1.13"
   },

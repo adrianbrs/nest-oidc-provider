@@ -10,6 +10,13 @@
 
 [oidc-provider](https://github.com/panva/node-oidc-provider) module for [Nest](https://github.com/nestjs/nest) framework (node.js)
 
+## NestJS compatibility table
+
+| nest-oidc-provider | NestJS |
+|---|---:|
+| 2.x | >= 9 and < 11 |
+| 3.x | >= 11 |
+
 ## Installation
 
 ```bash

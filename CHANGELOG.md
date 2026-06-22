@@ -1,5 +1,16 @@
 
 
+# [3.0.0](https://github.com/adrianbrs/nest-oidc-provider/compare/2.1.0...3.0.0) (2026-06-22)
+
+
+### Bug Fixes
+
+* use named wildcard in oidc controller [#33](https://github.com/adrianbrs/nest-oidc-provider/issues/33)   ([7e3d015](https://github.com/adrianbrs/nest-oidc-provider/commit/7e3d0156266b7c7bc33452cc4045344f04240b9b))
+
+### BREAKING CHANGES
+
+* NestJS versions prior to v11 do not support the new named wildcard pattern, so upgrading to NestJS >= v11 is mandatory.
+
 # [2.1.0](https://github.com/adrianbrs/nest-oidc-provider/compare/2.0.0...2.1.0) (2025-04-03)
 
 

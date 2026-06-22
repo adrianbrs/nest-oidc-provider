@@ -1,10 +1,10 @@
+import { Injectable } from '@nestjs/common';
 import {
   AdapterFactory,
   OidcConfiguration,
   OidcModuleOptions,
   OidcModuleOptionsFactory,
 } from 'nest-oidc-provider';
-import { Injectable } from '@nestjs/common';
 import { TestAdapter } from '../adapters/test.adapter';
 import { DatabaseService } from '../database/database.service';
 
@@ -37,7 +37,6 @@ export class OidcConfigService implements OidcModuleOptionsFactory {
         },
       ],
       pkce: {
-        methods: ['S256'],
         required: () => false,
       },
       scopes: [
